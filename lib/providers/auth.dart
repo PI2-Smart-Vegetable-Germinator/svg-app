@@ -16,8 +16,6 @@ class Auth with ChangeNotifier {
   }
 
   Future<void> _setAuthTokens(Map<String, dynamic> tokens) async {
-    print("oi m8");
-
     _accessToken = tokens['accessToken'];
     _refreshToken = tokens['refreshToken'];
 
@@ -68,5 +66,21 @@ class Auth with ChangeNotifier {
     } catch (error) {
       throw error;
     }
+  }
+
+  Future<bool> tryAutoLogin() async {
+    final sharedPrefs = await SharedPreferences.getInstance();
+    if (!sharedPrefs.containsKey('authTokens')) {
+      return false;
+    }
+
+    final authTokens =
+        json.decode(sharedPrefs.get('authTokens')) as Map<String, Object>;
+
+    _accessToken = authTokens['accessToken'];
+    _refreshToken = authTokens['refreshToken'];
+
+    notifyListeners();
+    return true;
   }
 }

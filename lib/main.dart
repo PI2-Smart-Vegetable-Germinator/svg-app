@@ -25,7 +25,15 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             primaryColor: Color.fromRGBO(144, 201, 82, 1),
           ),
-          home: auth.isAuthenticated ? HomeScreen() : LoginScreen(),
+          home: auth.isAuthenticated
+              ? HomeScreen()
+              : FutureBuilder(
+                  future: auth.tryAutoLogin(),
+                  builder: (ctx, authResult) =>
+                      authResult.connectionState == ConnectionState.waiting
+                          ? CircularProgressIndicator()
+                          : LoginScreen(),
+                ),
           routes: {
             SignupScreen.routeName: (ctx) => SignupScreen(),
           },
