@@ -8,33 +8,24 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int plantingId;
-  String plantingName;
-  int plantingTime;
+  String _plantingName = '';
+  int _plantingTime = 0;
   int _currentHumidity = 0;
   int _currentTemperature = 0;
   int _hoursBacklit = 0;
 
-  Future<void> getLastPlantingStatus() async {
-    Response response = await get('http://192.168.0.7:5002/api/planting-time/');
-    final extractedData = json.decode(response.body);
-
-    setState(() {
-      plantingId = extractedData['data']['planting_id'];
-      plantingName = extractedData['data']['planting_name'];
-      plantingTime = extractedData['data']['planting_time'];
-    });
-  }
-
   Future<void> _getCurrentInfo() async {
     try {
-      Response response = await get('http://192.168.0.7:5002/api/current-info');
+      Response response =
+          await get('http://192.168.0.108:5002/api/current-info');
       final data = json.decode(response.body);
 
       setState(() {
         _currentHumidity = data['data']['current_humidity'];
         _currentTemperature = data['data']['current_temperature'];
         _hoursBacklit = data['data']['hours_backlit'];
+        _plantingName = data['data']['planting_name'];
+        _plantingTime = data['data']['planting_time'];
       });
     } catch (e) {
       print(e);
@@ -44,7 +35,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    getLastPlantingStatus();
     _getCurrentInfo();
   }
 
@@ -75,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Container(
                   margin: EdgeInsets.all(30),
                   child: Text(
-                    plantingTime.toString() + " dias de estufa",
+                    _plantingTime.toString() + " dias de estufa",
                     style: TextStyle(
                         fontSize: 40,
                         color: Colors.white,
@@ -237,14 +227,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           )
                         ],
                       )
-                    ]
-                  )
-                )
+                    ]))
               ],
-            )
-          )
-        ],
-      )
-    );
+            ))
+          ],
+        ));
   }
 }
