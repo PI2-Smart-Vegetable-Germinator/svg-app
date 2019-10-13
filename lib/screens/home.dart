@@ -10,6 +10,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   String _plantingName = '';
   int _plantingTime = 0;
+  int _remainingDays = 0;
   int _currentHumidity = 0;
   int _currentTemperature = 0;
   int _hoursBacklit = 0;
@@ -17,12 +18,13 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _getCurrentInfo() async {
     try {
       Response response =
-          await get('http://192.168.0.108:5002/api/current-info');
+          await get('http://192.168.0.108:5002/api/current-info/');
       final data = json.decode(response.body);
 
       setState(() {
         _currentHumidity = data['data']['current_humidity'];
         _currentTemperature = data['data']['current_temperature'];
+        _remainingDays = data['data']['cycle_remaining_days'];
         _hoursBacklit = data['data']['hours_backlit'];
         _plantingName = data['data']['planting_name'];
         _plantingTime = data['data']['planting_time'];
@@ -62,16 +64,48 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: MediaQuery.of(context).size.height / 4,
                 margin: EdgeInsets.all(0),
                 color: Color.fromRGBO(144, 201, 82, 1),
-                child: Container(
-                  margin: EdgeInsets.all(30),
-                  child: Text(
-                    _plantingTime.toString() + " dias de estufa",
-                    style: TextStyle(
-                        fontSize: 40,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500),
-                    textAlign: TextAlign.left,
-                  ),
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      width: double.infinity,
+                      margin: const EdgeInsets.only(
+                          left: 30, right: 30.0, top: 55.0, bottom: 5),
+                      child: Text(
+                        _plantingTime.toString() + " dias de estufa",
+                        style: TextStyle(
+                            fontSize: 40,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500),
+                        textAlign: TextAlign.left,
+                      ),
+                    ),
+                    Container(
+                      width: double.infinity,
+                      margin: const EdgeInsets.only(
+                          left: 30, right: 30.0, top: 10.0, bottom: 5),
+                      child: Text(
+                        "100% das mudas germinaram",
+                        style: TextStyle(
+                            fontSize: 22,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500),
+                        textAlign: TextAlign.left,
+                      ),
+                    ),
+                    Container(
+                      width: double.infinity,
+                      margin: const EdgeInsets.only(
+                          left: 30, right: 30.0, top: 10.0, bottom: 1),
+                      child: Text(
+                        _remainingDays.toString() + " dias até a colheita",
+                        style: TextStyle(
+                            fontSize: 22,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500),
+                        textAlign: TextAlign.left,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
