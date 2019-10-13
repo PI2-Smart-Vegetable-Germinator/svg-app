@@ -1,5 +1,12 @@
+import 'dart:convert';
+
+import 'package:http/http.dart' as http;
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:svg_app/screens/signup.dart';
 
 import './screens/login.dart';
@@ -8,8 +15,38 @@ import './providers/auth.dart';
 
 void main() => runApp(MyApp());
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   // This widget is the root of your application.
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final _fcm = FirebaseMessaging();
+
+  @override
+  void initState() {
+    super.initState();
+    SharedPreferences.getInstance().then((instance) {
+      if (instance.containsKey('authTokens')) {
+        final authTokens =
+            json.decode(instance.get('authTokens')) as Map<String, Object>;
+
+        var accessToken = authTokens['accessToken'];
+        _fcm.getToken().then((value) {
+          http.post(
+            'http://10.0.2.2:5002/api/device_id',
+            body: json.encode({"deviceId": value}),
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": "Bearer $accessToken"
+            },
+          );
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
