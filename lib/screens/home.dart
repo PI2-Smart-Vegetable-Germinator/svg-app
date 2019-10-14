@@ -21,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
     print('loading: ' + _isLoading.toString());
     try {
       Response response =
-          await get('http://192.168.0.108:5002/api/current-info/');
+          await get('http://192.168.0.9:5002/api/current-info/');
       final data = json.decode(response.body);
 
       setState(() {
@@ -77,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Container(
                       width: double.infinity,
                       margin: const EdgeInsets.only(
-                          left: 30, right: 30.0, top: 55.0, bottom: 5),
+                          left: 30, right: 30.0, top: 55.0),
                       child: _isLoading
                           ? Shimmer.fromColors(
                               baseColor: Colors.grey[500],
@@ -91,7 +91,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           : Text(
                               _plantingTime.toString() + " dias de estufa",
                               style: TextStyle(
-                                  fontSize: 40,
+                                  fontSize: 35,
                                   color: Colors.white,
                                   fontWeight: FontWeight.w500),
                               textAlign: TextAlign.left,
@@ -100,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Container(
                       width: double.infinity,
                       margin: const EdgeInsets.only(
-                          left: 30, right: 30.0, top: 10.0, bottom: 5),
+                          left: 30, right: 30.0, top: 10.0),
                       child: _isLoading
                           ? Shimmer.fromColors(
                               baseColor: Colors.grey[500],
@@ -114,7 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           : Text(
                               "100% das mudas germinaram",
                               style: TextStyle(
-                                  fontSize: 22,
+                                  fontSize: 19,
                                   color: Colors.white,
                                   fontWeight: FontWeight.w500),
                               textAlign: TextAlign.left,
@@ -123,7 +123,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Container(
                       width: double.infinity,
                       margin: const EdgeInsets.only(
-                          left: 30, right: 30.0, top: 10.0, bottom: 1),
+                          left: 30, right: 30.0, top: 5.0),
                       child: _isLoading
                           ? Shimmer.fromColors(
                               baseColor: Colors.grey[500],
@@ -138,7 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               _remainingDays.toString() +
                                   " dias até a colheita",
                               style: TextStyle(
-                                  fontSize: 22,
+                                  fontSize: 19,
                                   color: Colors.white,
                                   fontWeight: FontWeight.w500),
                               textAlign: TextAlign.left,
@@ -202,7 +202,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                   )
                                 : Text(
-                                    '$_currentTemperature\º C',
+                                    '$_currentTemperature\ºc',
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                         fontSize: 40.0,
