@@ -81,7 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         width: MediaQuery.of(context).size.width,
                         child: Icon(
                             Icons.keyboard_arrow_down,
-                            size: 60.0,
+                            size: MediaQuery.of(context).size.width / 5.5,
                             color: Colors.white,
                           )
                         ),
