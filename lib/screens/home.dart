@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'dart:convert';
+import 'package:shimmer/shimmer.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -8,43 +9,42 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int plantingId;
-  String plantingName;
-  int plantingTime;
+  String _plantingName = '';
+  int _plantingTime = 0;
+  int _remainingDays = 0;
   int _currentHumidity = 0;
   int _currentTemperature = 0;
   int _hoursBacklit = 0;
-
-  Future<void> getLastPlantingStatus() async {
-    Response response = await get('http://192.168.0.7:5002/api/planting-time/');
-    final extractedData = json.decode(response.body);
-
-    setState(() {
-      plantingId = extractedData['data']['planting_id'];
-      plantingName = extractedData['data']['planting_name'];
-      plantingTime = extractedData['data']['planting_time'];
-    });
-  }
+  var _isLoading = false;
 
   Future<void> _getCurrentInfo() async {
+    print('loading: ' + _isLoading.toString());
     try {
-      Response response = await get('http://192.168.0.7:5002/api/current-info');
+      Response response =
+          await get('http://192.168.0.9:5002/api/current-info/');
       final data = json.decode(response.body);
 
       setState(() {
         _currentHumidity = data['data']['current_humidity'];
         _currentTemperature = data['data']['current_temperature'];
+        _remainingDays = data['data']['cycle_remaining_days'];
         _hoursBacklit = data['data']['hours_backlit'];
+        _plantingName = data['data']['planting_name'];
+        _plantingTime = data['data']['planting_time'];
+        _isLoading = false;
       });
+      print('loading: ' + _isLoading.toString());
     } catch (e) {
+      _isLoading = false;
+      print('loading: ' + _isLoading.toString());
       print(e);
     }
   }
 
   @override
   void initState() {
+    _isLoading = true;
     super.initState();
-    getLastPlantingStatus();
     _getCurrentInfo();
   }
 
@@ -72,16 +72,79 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: MediaQuery.of(context).size.height / 4,
                 margin: EdgeInsets.all(0),
                 color: Color.fromRGBO(144, 201, 82, 1),
-                child: Container(
-                  margin: EdgeInsets.all(30),
-                  child: Text(
-                    plantingTime.toString() + " dias de estufa",
-                    style: TextStyle(
-                        fontSize: 40,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500),
-                    textAlign: TextAlign.left,
-                  ),
+                child: Column(
+                  children: <Widget>[
+                    Container(
+                      width: double.infinity,
+                      margin: const EdgeInsets.only(
+                          left: 30, right: 30.0, top: 55.0),
+                      child: _isLoading
+                          ? Shimmer.fromColors(
+                              baseColor: Colors.grey[500],
+                              highlightColor: Colors.white,
+                              child: Container(
+                                width: double.infinity,
+                                height: 35.0,
+                                color: Colors.white70,
+                              ),
+                            )
+                          : Text(
+                              _plantingTime.toString() + " dias de estufa",
+                              style: TextStyle(
+                                  fontSize: 35,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500),
+                              textAlign: TextAlign.left,
+                            ),
+                    ),
+                    Container(
+                      width: double.infinity,
+                      margin: const EdgeInsets.only(
+                          left: 30, right: 30.0, top: 10.0),
+                      child: _isLoading
+                          ? Shimmer.fromColors(
+                              baseColor: Colors.grey[500],
+                              highlightColor: Colors.white,
+                              child: Container(
+                                width: double.infinity,
+                                height: 25.0,
+                                color: Colors.white70,
+                              ),
+                            )
+                          : Text(
+                              "100% das mudas germinaram",
+                              style: TextStyle(
+                                  fontSize: 19,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500),
+                              textAlign: TextAlign.left,
+                            ),
+                    ),
+                    Container(
+                      width: double.infinity,
+                      margin: const EdgeInsets.only(
+                          left: 30, right: 30.0, top: 5.0),
+                      child: _isLoading
+                          ? Shimmer.fromColors(
+                              baseColor: Colors.grey[500],
+                              highlightColor: Colors.white,
+                              child: Container(
+                                width: double.infinity,
+                                height: 25.0,
+                                color: Colors.white70,
+                              ),
+                            )
+                          : Text(
+                              _remainingDays.toString() +
+                                  " dias até a colheita",
+                              style: TextStyle(
+                                  fontSize: 19,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500),
+                              textAlign: TextAlign.left,
+                            ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -127,15 +190,25 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           Container(
                             margin: EdgeInsets.only(top: 25.0),
-                            width: 200.0,
-                            child: Text(
-                              '$_currentTemperature\º C',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 40.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xff575757)),
-                            ),
+                            width: 100.0,
+                            child: _isLoading
+                                ? Shimmer.fromColors(
+                                    baseColor: Colors.grey[500],
+                                    highlightColor: Colors.white,
+                                    child: Container(
+                                      width: double.infinity / 2,
+                                      height: 25.0,
+                                      color: Colors.white70,
+                                    ),
+                                  )
+                                : Text(
+                                    '$_currentTemperature\ºc',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 40.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xff575757)),
+                                  ),
                           )
                         ],
                       )
@@ -177,15 +250,25 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           Container(
                             margin: EdgeInsets.only(top: 25.0),
-                            width: 200.0,
-                            child: Text(
-                              '$_hoursBacklit\h',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 40.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xff575757)),
-                            ),
+                            width: 100.0,
+                            child: _isLoading
+                                ? Shimmer.fromColors(
+                                    baseColor: Colors.grey[500],
+                                    highlightColor: Colors.white,
+                                    child: Container(
+                                      width: double.infinity,
+                                      height: 25.0,
+                                      color: Colors.white70,
+                                    ),
+                                  )
+                                : Text(
+                                    '$_hoursBacklit\h',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 40.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xff575757)),
+                                  ),
                           )
                         ],
                       )
@@ -225,26 +308,32 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           Container(
                             margin: EdgeInsets.only(top: 25.0),
-                            width: 200.0,
-                            child: Text(
-                              '$_currentHumidity\%',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                  fontSize: 40.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xff575757)),
-                            ),
+                            width: 100.0,
+                            child: _isLoading
+                                ? Shimmer.fromColors(
+                                    baseColor: Colors.grey[500],
+                                    highlightColor: Colors.white,
+                                    child: Container(
+                                      width: double.infinity,
+                                      height: 25.0,
+                                      color: Colors.white70,
+                                    ),
+                                  )
+                                : Text(
+                                    '$_currentHumidity\%',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontSize: 40.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xff575757)),
+                                  ),
                           )
                         ],
                       )
-                    ]
-                  )
-                )
+                    ]))
               ],
-            )
-          )
-        ],
-      )
-    );
+            ))
+          ],
+        ));
   }
 }
