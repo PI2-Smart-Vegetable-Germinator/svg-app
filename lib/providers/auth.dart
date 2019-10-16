@@ -4,10 +4,13 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 import '../models/http_exception.dart';
 
 class Auth with ChangeNotifier {
+  final _fcm = FirebaseMessaging();
+
   String _accessToken;
   String _refreshToken;
 
@@ -30,6 +33,9 @@ class Auth with ChangeNotifier {
   }
 
   Future<void> signup(Map<String, String> authData) async {
+    var deviceId = await _fcm.getToken();
+    authData["deviceId"] = deviceId;
+
     try {
       final response = await http.post(
         'http://10.0.2.2:5002/api/signup',
@@ -50,6 +56,9 @@ class Auth with ChangeNotifier {
   }
 
   Future<void> login(Map<String, String> authData) async {
+    var deviceId = await _fcm.getToken();
+    authData["deviceId"] = deviceId;
+
     try {
       final response = await http.post(
         'http://10.0.2.2:5002/api/login',
