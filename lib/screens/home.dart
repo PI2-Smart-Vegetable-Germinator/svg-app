@@ -21,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
     print('loading: ' + _isLoading.toString());
     try {
       Response response =
-          await get('http://192.168.0.9:5002/api/current-info/');
+          await get('http://192.168.43.86:5002/api/current-info/');
       final data = json.decode(response.body);
 
       setState(() {
