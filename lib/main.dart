@@ -11,6 +11,8 @@ import 'package:svg_app/screens/signup.dart';
 
 import './screens/login.dart';
 import './screens/home.dart';
+import './screens/plantings_history.dart';
+
 import './providers/auth.dart';
 
 void main() => runApp(MyApp());
@@ -35,7 +37,7 @@ class _MyAppState extends State<MyApp> {
         var accessToken = authTokens['accessToken'];
         _fcm.getToken().then((value) {
           http.post(
-            'http://10.0.2.2:5002/api/device_id',
+            'http://192.168.0.108:5002/api/device_id/',
             body: json.encode({"deviceId": value}),
             headers: {
               "Content-Type": "application/json",
@@ -73,6 +75,7 @@ class _MyAppState extends State<MyApp> {
                 ),
           routes: {
             SignupScreen.routeName: (ctx) => SignupScreen(),
+            PlantingsHistory.routeName: (ctx) => PlantingsHistory(),
           },
         );
       }),

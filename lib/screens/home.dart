@@ -21,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
     print('loading: ' + _isLoading.toString());
     try {
       Response response =
-          await get('http://192.168.43.86:5002/api/current-info/');
+          await get('http://192.168.0.108:5002/api/current-info/');
       final data = json.decode(response.body);
 
       setState(() {
@@ -362,7 +362,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   backgroundImage: NetworkImage('https://planetahuerto-6f4f.kxcdn.com/estaticos/imagenes/articulo_revista/154/154_620x465.jpg'),
                 ),
                 onTap: () {
-                  print('oh o pau quebrando !!!');
+                  Navigator.of(context).pushNamed('/plantings');
                 },
               )
             ),
