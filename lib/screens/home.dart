@@ -21,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
     print('loading: ' + _isLoading.toString());
     try {
       Response response =
-          await get('http://192.168.0.9:5002/api/current-info/');
+          await get('http://192.168.43.86:5002/api/current-info/');
       final data = json.decode(response.body);
 
       setState(() {
@@ -62,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           backgroundColor: Color(0xff89C34B),
         ),
-        body: Column(
+        body: Stack(
           children: <Widget>[
             ClipRRect(
               borderRadius: new BorderRadius.only(
@@ -74,10 +74,26 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: Color.fromRGBO(144, 201, 82, 1),
                 child: Column(
                   children: <Widget>[
+                    Center(
+                      child: GestureDetector(
+                        child: Container(
+                        height: MediaQuery.of(context).size.height / 14.0,
+                        width: MediaQuery.of(context).size.width,
+                        child: Icon(
+                            Icons.keyboard_arrow_down,
+                            size: MediaQuery.of(context).size.width / 5.5,
+                            color: Colors.white,
+                          )
+                        ),
+                        onTap: () {
+                          print('puta vida !!!');
+                        }
+                      )
+                    ),
                     Container(
                       width: double.infinity,
                       margin: const EdgeInsets.only(
-                          left: 30, right: 30.0, top: 55.0),
+                          left: 30, right: 30.0, top: 5.0),
                       child: _isLoading
                           ? Shimmer.fromColors(
                               baseColor: Colors.grey[500],
@@ -148,8 +164,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-            new Expanded(
-                child: GridView.count(
+            Container(
+              margin: EdgeInsets.only(
+                top: MediaQuery.of(context).size.height / 4
+              ),
+              child: GridView.count(
               primary: false,
               padding: const EdgeInsets.all(20),
               crossAxisSpacing: 10.0,
@@ -332,7 +351,21 @@ class _HomeScreenState extends State<HomeScreen> {
                       )
                     ]))
               ],
-            ))
+            )),
+            Positioned(
+              right: MediaQuery.of(context).size.width / 30.0,
+              top: MediaQuery.of(context).size.height / 6.1,
+              child: GestureDetector(
+                child: CircleAvatar(
+                  radius: MediaQuery.of(context).size.width / 6.5,
+                  backgroundColor: Color.fromRGBO(144, 201, 82, 1),
+                  backgroundImage: NetworkImage('https://planetahuerto-6f4f.kxcdn.com/estaticos/imagenes/articulo_revista/154/154_620x465.jpg'),
+                ),
+                onTap: () {
+                  print('oh o pau quebrando !!!');
+                },
+              )
+            ),
           ],
         ));
   }
