@@ -11,7 +11,7 @@ import 'package:svg_app/screens/signup.dart';
 
 import './screens/login.dart';
 import './screens/home.dart';
-import './screens/plantings_history.dart';
+import './screens/plantings_history_screen.dart';
 import './models/planting_history.dart';
 
 

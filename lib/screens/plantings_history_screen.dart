@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:shimmer/shimmer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/planting_history.dart';
+import '../widgets/plantings_grid.dart';
 
 class PlantingsHistory extends StatefulWidget {
   static const routeName = '/plantings';
@@ -40,10 +41,8 @@ class _PlantingsHistoryState extends State<PlantingsHistory> {
 
   @override
   Widget build(BuildContext context) {
-    final plantings = Provider.of<PlantingHistory>(context);
-
     return Scaffold(
-        body: Stack(
+        body: new Column(
       children: <Widget>[
         ClipRRect(
           borderRadius:
@@ -65,6 +64,9 @@ class _PlantingsHistoryState extends State<PlantingsHistory> {
               ),
             ),
           ),
+        ),
+        new Expanded(
+          child: PlantingssGrid(),
         ),
       ],
     ));
