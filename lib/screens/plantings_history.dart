@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:http/http.dart';
 import 'dart:convert';
 import 'package:shimmer/shimmer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../models/planting_history.dart';
 
 class PlantingsHistory extends StatefulWidget {
   static const routeName = '/plantings';
@@ -12,47 +14,34 @@ class PlantingsHistory extends StatefulWidget {
 }
 
 class _PlantingsHistoryState extends State<PlantingsHistory> {
-  // String _plantingName = '';
-  // int _plantingTime = 0;
-  // int _remainingDays = 0;
-  // int _currentHumidity = 0;
-  // int _currentTemperature = 0;
-  // int _hoursBacklit = 0;
-  // var _isLoading = false;
-
-  // Future<void> _getHistoryData() async {
-  //   print('loading: ' + _isLoading.toString());
-  //   try {
-  //     Response response =
-  //         await get('http://192.168.0.108:5002/api/current-info/');
-  //     final data = json.decode(response.body);
-
-  //     setState(() {
-  //       // _currentHumidity = data['data']['current_humidity'];
-  //       // _currentTemperature = data['data']['current_temperature'];
-  //       // _remainingDays = data['data']['cycle_remaining_days'];
-  //       // _hoursBacklit = data['data']['hours_backlit'];
-  //       // _plantingName = data['data']['planting_name'];
-  //       // _plantingTime = data['data']['planting_time'];
-  //       _isLoading = false;
-  //     });
-  //     print('loading: ' + _isLoading.toString());
-  //   } catch (e) {
-  //     _isLoading = false;
-  //     print('loading: ' + _isLoading.toString());
-  //     print(e);
-  //   }
-  // }
+  var _isInit = true;
+  var _isLoading = false;
 
   @override
   void initState() {
-    // _isLoading = true;
     super.initState();
-    // _getHistoryData();
+  }
+
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      setState(() {
+        _isLoading = true;
+      });
+      Provider.of<PlantingHistory>(context).fetchAndSetPlantings().then((_) {
+        setState(() {
+          _isLoading = false;
+        });
+      });
+    }
+    _isInit = false;
+    super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
+    final plantings = Provider.of<PlantingHistory>(context);
+
     return Scaffold(
         body: Stack(
       children: <Widget>[
@@ -61,9 +50,20 @@ class _PlantingsHistoryState extends State<PlantingsHistory> {
               new BorderRadius.only(bottomLeft: const Radius.circular(50.0)),
           child: Container(
             width: double.infinity,
-            height: MediaQuery.of(context).size.height / 4,
+            height: MediaQuery.of(context).size.height / 7,
             margin: EdgeInsets.all(0),
             color: Color.fromRGBO(144, 201, 82, 1),
+            child: Container(
+              margin: EdgeInsets.all(30),
+              child: Text(
+                "Minhas plantas",
+                style: TextStyle(
+                    fontSize: 40,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500),
+                textAlign: TextAlign.left,
+              ),
+            ),
           ),
         ),
       ],

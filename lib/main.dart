@@ -12,6 +12,8 @@ import 'package:svg_app/screens/signup.dart';
 import './screens/login.dart';
 import './screens/home.dart';
 import './screens/plantings_history.dart';
+import './models/planting_history.dart';
+
 
 import './providers/auth.dart';
 
@@ -55,7 +57,10 @@ class _MyAppState extends State<MyApp> {
       providers: [
         ChangeNotifierProvider.value(
           value: Auth(),
-        )
+        ),
+        ChangeNotifierProvider.value(
+          value: PlantingHistory(),
+        ),
       ],
       child: Consumer<Auth>(builder: (ctx, auth, _) {
         print(auth.isAuthenticated);

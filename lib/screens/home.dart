@@ -75,21 +75,19 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Column(
                   children: <Widget>[
                     Center(
-                      child: GestureDetector(
-                        child: Container(
-                        height: MediaQuery.of(context).size.height / 14.0,
-                        width: MediaQuery.of(context).size.width,
-                        child: Icon(
-                            Icons.keyboard_arrow_down,
-                            size: MediaQuery.of(context).size.width / 5.5,
-                            color: Colors.white,
-                          )
-                        ),
-                        onTap: () {
-                          print('puta vida !!!');
-                        }
-                      )
-                    ),
+                        child: GestureDetector(
+                            child: Container(
+                                height:
+                                    MediaQuery.of(context).size.height / 14.0,
+                                width: MediaQuery.of(context).size.width,
+                                child: Icon(
+                                  Icons.keyboard_arrow_down,
+                                  size: MediaQuery.of(context).size.width / 5.5,
+                                  color: Colors.white,
+                                )),
+                            onTap: () {
+                              print('puta vida !!!');
+                            })),
                     Container(
                       width: double.infinity,
                       margin: const EdgeInsets.only(
@@ -165,207 +163,206 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             Container(
-              margin: EdgeInsets.only(
-                top: MediaQuery.of(context).size.height / 4
-              ),
-              child: GridView.count(
-              primary: false,
-              padding: const EdgeInsets.all(20),
-              crossAxisSpacing: 10.0,
-              mainAxisSpacing: 15.0,
-              crossAxisCount: 1,
-              childAspectRatio: 2.6,
-              children: <Widget>[
-                Container(
-                  padding: const EdgeInsets.all(10.0),
-                  decoration: new BoxDecoration(
-                      color: Color(0xffF1F2F2),
-                      borderRadius:
-                          new BorderRadius.all(const Radius.circular(15.0)),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black38,
-                          blurRadius: 2.0,
-                          offset: Offset(6.0, 6.0),
-                        )
-                      ]),
-                  child: Row(
-                    children: <Widget>[
-                      Icon(Icons.insert_chart,
-                          color: Color(0xffFF4242), size: 120.0),
-                      Column(
+                margin: EdgeInsets.only(
+                    top: MediaQuery.of(context).size.height / 4),
+                child: GridView.count(
+                  primary: false,
+                  padding: const EdgeInsets.all(20),
+                  crossAxisSpacing: 10.0,
+                  mainAxisSpacing: 15.0,
+                  crossAxisCount: 1,
+                  childAspectRatio: 2.6,
+                  children: <Widget>[
+                    Container(
+                      padding: const EdgeInsets.all(10.0),
+                      decoration: new BoxDecoration(
+                          color: Color(0xffF1F2F2),
+                          borderRadius:
+                              new BorderRadius.all(const Radius.circular(15.0)),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black38,
+                              blurRadius: 2.0,
+                              offset: Offset(6.0, 6.0),
+                            )
+                          ]),
+                      child: Row(
                         children: <Widget>[
-                          Container(
-                            margin: EdgeInsets.only(top: 12.0),
-                            width: 200.0,
-                            height: 30.0,
-                            child: Text(
-                              'Temperatura',
-                              style: TextStyle(
-                                  fontSize: 23.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xff575757)),
-                            ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(top: 25.0),
-                            width: 100.0,
-                            child: _isLoading
-                                ? Shimmer.fromColors(
-                                    baseColor: Colors.grey[500],
-                                    highlightColor: Colors.white,
-                                    child: Container(
-                                      width: double.infinity / 2,
-                                      height: 25.0,
-                                      color: Colors.white70,
-                                    ),
-                                  )
-                                : Text(
-                                    '$_currentTemperature\ºc',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 40.0,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xff575757)),
-                                  ),
+                          Icon(Icons.insert_chart,
+                              color: Color(0xffFF4242), size: 120.0),
+                          Column(
+                            children: <Widget>[
+                              Container(
+                                margin: EdgeInsets.only(top: 12.0),
+                                width: 200.0,
+                                height: 30.0,
+                                child: Text(
+                                  'Temperatura',
+                                  style: TextStyle(
+                                      fontSize: 23.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xff575757)),
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(top: 25.0),
+                                width: 100.0,
+                                child: _isLoading
+                                    ? Shimmer.fromColors(
+                                        baseColor: Colors.grey[500],
+                                        highlightColor: Colors.white,
+                                        child: Container(
+                                          width: double.infinity / 2,
+                                          height: 25.0,
+                                          color: Colors.white70,
+                                        ),
+                                      )
+                                    : Text(
+                                        '$_currentTemperature\ºc',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontSize: 40.0,
+                                            fontWeight: FontWeight.bold,
+                                            color: Color(0xff575757)),
+                                      ),
+                              )
+                            ],
                           )
                         ],
-                      )
-                    ],
-                  ),
-                ),
-                Container(
-                    padding: const EdgeInsets.all(10.0),
-                    decoration: new BoxDecoration(
-                        color: Color(0xffF1F2F2),
-                        borderRadius:
-                            new BorderRadius.all(const Radius.circular(15.0)),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black38,
-                            blurRadius: 2.0,
-                            offset: Offset(6.0, 6.0),
-                          )
-                        ]),
-                    child: Row(children: <Widget>[
-                      Icon(
-                        Icons.wb_sunny,
-                        color: Color(0xffFFC107),
-                        size: 120.0,
                       ),
-                      Column(
-                        children: <Widget>[
-                          Container(
-                            margin: EdgeInsets.only(top: 12.0),
-                            width: 200.0,
-                            height: 30.0,
-                            child: Text(
-                              'Tempo de exposição à luz',
-                              style: TextStyle(
-                                  fontSize: 17.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xff575757)),
-                            ),
+                    ),
+                    Container(
+                        padding: const EdgeInsets.all(10.0),
+                        decoration: new BoxDecoration(
+                            color: Color(0xffF1F2F2),
+                            borderRadius: new BorderRadius.all(
+                                const Radius.circular(15.0)),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black38,
+                                blurRadius: 2.0,
+                                offset: Offset(6.0, 6.0),
+                              )
+                            ]),
+                        child: Row(children: <Widget>[
+                          Icon(
+                            Icons.wb_sunny,
+                            color: Color(0xffFFC107),
+                            size: 120.0,
                           ),
-                          Container(
-                            margin: EdgeInsets.only(top: 25.0),
-                            width: 100.0,
-                            child: _isLoading
-                                ? Shimmer.fromColors(
-                                    baseColor: Colors.grey[500],
-                                    highlightColor: Colors.white,
-                                    child: Container(
-                                      width: double.infinity,
-                                      height: 25.0,
-                                      color: Colors.white70,
-                                    ),
-                                  )
-                                : Text(
-                                    '$_hoursBacklit\h',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 40.0,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xff575757)),
-                                  ),
+                          Column(
+                            children: <Widget>[
+                              Container(
+                                margin: EdgeInsets.only(top: 12.0),
+                                width: 200.0,
+                                height: 30.0,
+                                child: Text(
+                                  'Tempo de exposição à luz',
+                                  style: TextStyle(
+                                      fontSize: 17.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xff575757)),
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(top: 25.0),
+                                width: 100.0,
+                                child: _isLoading
+                                    ? Shimmer.fromColors(
+                                        baseColor: Colors.grey[500],
+                                        highlightColor: Colors.white,
+                                        child: Container(
+                                          width: double.infinity,
+                                          height: 25.0,
+                                          color: Colors.white70,
+                                        ),
+                                      )
+                                    : Text(
+                                        '$_hoursBacklit\h',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontSize: 40.0,
+                                            fontWeight: FontWeight.bold,
+                                            color: Color(0xff575757)),
+                                      ),
+                              )
+                            ],
                           )
-                        ],
-                      )
-                    ])),
-                Container(
-                    padding: const EdgeInsets.all(10.0),
-                    decoration: new BoxDecoration(
-                        color: Color(0xffF1F2F2),
-                        borderRadius:
-                            new BorderRadius.all(const Radius.circular(15.0)),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black38,
-                            blurRadius: 2.0,
-                            offset: Offset(6.0, 6.0),
-                          )
-                        ]),
-                    child: Row(children: <Widget>[
-                      Icon(
-                        Icons.wb_cloudy,
-                        color: Color(0xff3499C1),
-                        size: 120.0,
-                      ),
-                      Column(
-                        children: <Widget>[
-                          Container(
-                            margin: EdgeInsets.only(top: 12.0),
-                            width: 200.0,
-                            height: 30.0,
-                            child: Text(
-                              'Umidade',
-                              style: TextStyle(
-                                  fontSize: 23.0,
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xff575757)),
-                            ),
+                        ])),
+                    Container(
+                        padding: const EdgeInsets.all(10.0),
+                        decoration: new BoxDecoration(
+                            color: Color(0xffF1F2F2),
+                            borderRadius: new BorderRadius.all(
+                                const Radius.circular(15.0)),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black38,
+                                blurRadius: 2.0,
+                                offset: Offset(6.0, 6.0),
+                              )
+                            ]),
+                        child: Row(children: <Widget>[
+                          Icon(
+                            Icons.wb_cloudy,
+                            color: Color(0xff3499C1),
+                            size: 120.0,
                           ),
-                          Container(
-                            margin: EdgeInsets.only(top: 25.0),
-                            width: 100.0,
-                            child: _isLoading
-                                ? Shimmer.fromColors(
-                                    baseColor: Colors.grey[500],
-                                    highlightColor: Colors.white,
-                                    child: Container(
-                                      width: double.infinity,
-                                      height: 25.0,
-                                      color: Colors.white70,
-                                    ),
-                                  )
-                                : Text(
-                                    '$_currentHumidity\%',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize: 40.0,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xff575757)),
-                                  ),
+                          Column(
+                            children: <Widget>[
+                              Container(
+                                margin: EdgeInsets.only(top: 12.0),
+                                width: 200.0,
+                                height: 30.0,
+                                child: Text(
+                                  'Umidade',
+                                  style: TextStyle(
+                                      fontSize: 23.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xff575757)),
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.only(top: 25.0),
+                                width: 100.0,
+                                child: _isLoading
+                                    ? Shimmer.fromColors(
+                                        baseColor: Colors.grey[500],
+                                        highlightColor: Colors.white,
+                                        child: Container(
+                                          width: double.infinity,
+                                          height: 25.0,
+                                          color: Colors.white70,
+                                        ),
+                                      )
+                                    : Text(
+                                        '$_currentHumidity\%',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                            fontSize: 40.0,
+                                            fontWeight: FontWeight.bold,
+                                            color: Color(0xff575757)),
+                                      ),
+                              )
+                            ],
                           )
-                        ],
-                      )
-                    ]))
-              ],
-            )),
+                        ]))
+                  ],
+                )),
             Positioned(
-              right: MediaQuery.of(context).size.width / 30.0,
-              top: MediaQuery.of(context).size.height / 6.1,
-              child: GestureDetector(
-                child: CircleAvatar(
-                  radius: MediaQuery.of(context).size.width / 6.5,
-                  backgroundColor: Color.fromRGBO(144, 201, 82, 1),
-                  backgroundImage: NetworkImage('https://planetahuerto-6f4f.kxcdn.com/estaticos/imagenes/articulo_revista/154/154_620x465.jpg'),
-                ),
-                onTap: () {
-                  Navigator.of(context).pushNamed('/plantings');
-                },
-              )
-            ),
+                right: MediaQuery.of(context).size.width / 30.0,
+                top: MediaQuery.of(context).size.height / 6.1,
+                child: GestureDetector(
+                  child: CircleAvatar(
+                    radius: MediaQuery.of(context).size.width / 6.5,
+                    backgroundColor: Color.fromRGBO(144, 201, 82, 1),
+                    backgroundImage: NetworkImage(
+                        'https://planetahuerto-6f4f.kxcdn.com/estaticos/imagenes/articulo_revista/154/154_620x465.jpg'),
+                  ),
+                  onTap: () {
+                    Navigator.of(context).pushNamed('/plantings');
+                  },
+                )),
           ],
         ));
   }
