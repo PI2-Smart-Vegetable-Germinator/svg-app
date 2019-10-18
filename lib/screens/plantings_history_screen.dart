@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:http/http.dart';
 import 'dart:convert';
 import 'package:shimmer/shimmer.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../models/planting_history.dart';
 import '../widgets/plantings_grid.dart';
+import '../providers/plantings.dart';
 
 class PlantingsHistory extends StatefulWidget {
   static const routeName = '/plantings';
@@ -29,7 +27,7 @@ class _PlantingsHistoryState extends State<PlantingsHistory> {
       setState(() {
         _isLoading = true;
       });
-      Provider.of<PlantingHistory>(context).fetchAndSetPlantings().then((_) {
+      Provider.of<Plantings>(context).fetchAndSetPlantings().then((_) {
         setState(() {
           _isLoading = false;
         });
@@ -66,7 +64,7 @@ class _PlantingsHistoryState extends State<PlantingsHistory> {
           ),
         ),
         new Expanded(
-          child: PlantingssGrid(),
+          child: PlantingsGrid(),
         ),
       ],
     ));

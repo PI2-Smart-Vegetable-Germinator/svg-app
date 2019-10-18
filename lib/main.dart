@@ -12,7 +12,7 @@ import 'package:svg_app/screens/signup.dart';
 import './screens/login.dart';
 import './screens/home.dart';
 import './screens/plantings_history_screen.dart';
-import './models/planting_history.dart';
+import './providers/plantings.dart';
 
 
 import './providers/auth.dart';
@@ -59,7 +59,7 @@ class _MyAppState extends State<MyApp> {
           value: Auth(),
         ),
         ChangeNotifierProvider.value(
-          value: PlantingHistory(),
+          value: Plantings(),
         ),
       ],
       child: Consumer<Auth>(builder: (ctx, auth, _) {
