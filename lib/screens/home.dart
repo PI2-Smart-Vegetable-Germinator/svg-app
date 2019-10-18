@@ -51,42 +51,42 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {
-            // Add your onPressed code here!
-          },
-          label: Text('Irrigar', style: TextStyle(fontSize: 16.0)),
-          icon: Icon(
-            Icons.spa,
-            size: 30.0,
-          ),
-          backgroundColor: Color(0xff89C34B),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () {
+          // Add your onPressed code here!
+        },
+        label: Text('Irrigar', style: TextStyle(fontSize: 16.0)),
+        icon: Icon(
+          Icons.spa,
+          size: 30.0,
         ),
-        body: Column(
-          children: <Widget>[
-            ClipRRect(
-              borderRadius: new BorderRadius.only(
-                  bottomLeft: const Radius.circular(50.0)),
+        backgroundColor: Color(0xff89C34B),
+      ),
+      body: Column(
+        children: <Widget>[
+          ClipRRect(
+            borderRadius:
+                new BorderRadius.only(bottomLeft: const Radius.circular(50.0)),
+            child: Container(
+              width: double.infinity,
+              height: MediaQuery.of(context).size.height / 4,
+              margin: EdgeInsets.all(0),
+              color: Color.fromRGBO(144, 201, 82, 1),
               child: Container(
-                width: double.infinity,
-                height: MediaQuery.of(context).size.height / 4,
-                margin: EdgeInsets.all(0),
-                color: Color.fromRGBO(144, 201, 82, 1),
-                child: Container(
-                  margin: EdgeInsets.all(30),
-                  child: Text(
-                    plantingTime.toString() + " dias de estufa",
-                    style: TextStyle(
-                        fontSize: 40,
-                        color: Colors.white,
-                        fontWeight: FontWeight.w500),
-                    textAlign: TextAlign.left,
-                  ),
+                margin: EdgeInsets.all(30),
+                child: Text(
+                  plantingTime.toString() + " dias de estufa",
+                  style: TextStyle(
+                      fontSize: 40,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w500),
+                  textAlign: TextAlign.left,
                 ),
               ),
             ),
-            new Expanded(
-                child: GridView.count(
+          ),
+          new Expanded(
+            child: GridView.count(
               primary: false,
               padding: const EdgeInsets.all(20),
               crossAxisSpacing: 10.0,
@@ -191,19 +191,20 @@ class _HomeScreenState extends State<HomeScreen> {
                       )
                     ])),
                 Container(
-                    padding: const EdgeInsets.all(10.0),
-                    decoration: new BoxDecoration(
-                        color: Color(0xffF1F2F2),
-                        borderRadius:
-                            new BorderRadius.all(const Radius.circular(15.0)),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black38,
-                            blurRadius: 2.0,
-                            offset: Offset(6.0, 6.0),
-                          )
-                        ]),
-                    child: Row(children: <Widget>[
+                  padding: const EdgeInsets.all(10.0),
+                  decoration: new BoxDecoration(
+                      color: Color(0xffF1F2F2),
+                      borderRadius:
+                          new BorderRadius.all(const Radius.circular(15.0)),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black38,
+                          blurRadius: 2.0,
+                          offset: Offset(6.0, 6.0),
+                        )
+                      ]),
+                  child: Row(
+                    children: <Widget>[
                       Icon(
                         Icons.wb_cloudy,
                         color: Color(0xff3499C1),
@@ -236,15 +237,15 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           )
                         ],
-                      )
-                    ]
-                  )
+                      ),
+                    ],
+                  ),
                 )
               ],
-            )
-          )
+            ),
+          ),
         ],
-      )
+      ),
     );
   }
 }

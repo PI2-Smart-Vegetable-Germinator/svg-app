@@ -13,9 +13,14 @@ class Auth with ChangeNotifier {
 
   String _accessToken;
   String _refreshToken;
+  int _machineId;
 
   bool get isAuthenticated {
     return _accessToken != null;
+  }
+
+  bool get hasMachine {
+    return _machineId != null;
   }
 
   Future<void> _setAuthTokens(Map<String, dynamic> tokens) async {
@@ -38,7 +43,7 @@ class Auth with ChangeNotifier {
 
     try {
       final response = await http.post(
-        'http://10.0.2.2:5002/api/signup',
+        'http://localhost:5002/api/signup',
         body: json.encode({"user": authData}),
         headers: {"Content-Type": "application/json"},
       );
@@ -61,7 +66,7 @@ class Auth with ChangeNotifier {
 
     try {
       final response = await http.post(
-        'http://10.0.2.2:5002/api/login',
+        'http://localhost:5002/api/login',
         body: json.encode(authData),
         headers: {"Content-Type": "application/json"},
       );
@@ -72,6 +77,32 @@ class Auth with ChangeNotifier {
 
       final responseJson = json.decode(response.body);
       await _setAuthTokens(responseJson['authTokens']);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  Future<void> sendPincode(String pincode) async {
+    var postData = {'pincode': pincode};
+
+    try {
+      final response = await http.post(
+        'http://localhost:5002/api/confirm_pairing',
+        body: json.encode(postData),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $_accessToken"
+        },
+      );
+
+      if (response.statusCode != 201) {
+        throw HttpException("Código invalido!");
+      }
+
+      final content = json.decode(response.body);
+      _machineId = content['machineId'] as int;
+
+      notifyListeners();
     } catch (error) {
       throw error;
     }
@@ -88,6 +119,16 @@ class Auth with ChangeNotifier {
 
     _accessToken = authTokens['accessToken'];
     _refreshToken = authTokens['refreshToken'];
+
+    final response = await http.get(
+      'http://localhost:5002/api/get_user',
+      headers: {"Authorization": "Bearer $_accessToken"},
+    );
+
+    if (response.statusCode == 200) {
+      final content = json.decode(response.body) as Map<String, dynamic>;
+      _machineId = content['user']['machineId'];
+    }
 
     notifyListeners();
     return true;

@@ -11,7 +11,9 @@ import 'package:svg_app/screens/signup.dart';
 
 import './screens/login.dart';
 import './screens/home.dart';
+import './screens/pairing.dart';
 import './providers/auth.dart';
+import './screens/loading.dart';
 
 void main() => runApp(MyApp());
 
@@ -35,7 +37,7 @@ class _MyAppState extends State<MyApp> {
         var accessToken = authTokens['accessToken'];
         _fcm.getToken().then((value) {
           http.post(
-            'http://10.0.2.2:5002/api/device_id',
+            'http://localhost:5002/api/device_id',
             body: json.encode({"deviceId": value}),
             headers: {
               "Content-Type": "application/json",
@@ -45,6 +47,21 @@ class _MyAppState extends State<MyApp> {
         });
       }
     });
+  }
+
+  Widget _buildHome(Auth auth) {
+    if (auth.isAuthenticated && auth.hasMachine) {
+      return HomeScreen();
+    } else if (auth.isAuthenticated && !auth.hasMachine) {
+      return PairingScreen(); // adicionar tela de pareamento aqui.
+    }
+    return FutureBuilder(
+      future: auth.tryAutoLogin(),
+      builder: (ctx, authResult) =>
+          authResult.connectionState == ConnectionState.waiting
+              ? LoadingScreen()
+              : LoginScreen(),
+    );
   }
 
   @override
@@ -62,15 +79,7 @@ class _MyAppState extends State<MyApp> {
           theme: ThemeData(
             primaryColor: Color.fromRGBO(144, 201, 82, 1),
           ),
-          home: auth.isAuthenticated
-              ? HomeScreen()
-              : FutureBuilder(
-                  future: auth.tryAutoLogin(),
-                  builder: (ctx, authResult) =>
-                      authResult.connectionState == ConnectionState.waiting
-                          ? CircularProgressIndicator()
-                          : LoginScreen(),
-                ),
+          home: _buildHome(auth),
           routes: {
             SignupScreen.routeName: (ctx) => SignupScreen(),
           },
