@@ -18,11 +18,10 @@ class Plantings with ChangeNotifier {
     final accessToken = authTokens['accessToken'];
 
     try {
-      Response response = await get(
-          'http://192.168.0.108:5002/api/plantings-history/',
-          headers: {
-            'Authorization': 'Bearer $accessToken',
-          });
+      Response response =
+          await get('http://10.0.2.2:5002/api/plantings-history/', headers: {
+        'Authorization': 'Bearer $accessToken',
+      });
 
       var data = json.decode(response.body) as Map<String, dynamic>;
       var extractedData = data['data']['plantings_history'];
