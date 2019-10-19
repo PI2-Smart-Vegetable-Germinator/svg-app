@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:shimmer/shimmer.dart';
 import '../widgets/plantings_grid.dart';
 import '../providers/plantings.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PlantingsHistory extends StatefulWidget {
   static const routeName = '/plantings';
@@ -39,6 +40,14 @@ class _PlantingsHistoryState extends State<PlantingsHistory> {
 
   @override
   Widget build(BuildContext context) {
+    double defaultScreenWidth = 380.0;
+    double defaultScreenHeight = 800.0;
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
+
     return Scaffold(
         body: new Column(
       children: <Widget>[
@@ -47,15 +56,17 @@ class _PlantingsHistoryState extends State<PlantingsHistory> {
               new BorderRadius.only(bottomLeft: const Radius.circular(50.0)),
           child: Container(
             width: double.infinity,
-            height: MediaQuery.of(context).size.height / 7,
+            height: ScreenUtil.instance.setHeight(100.0),
             margin: EdgeInsets.all(0),
             color: Color.fromRGBO(144, 201, 82, 1),
             child: Container(
-              margin: EdgeInsets.all(30),
+              margin: EdgeInsets.only(
+                              top: ScreenUtil.instance.setHeight(25.0),
+                              left: ScreenUtil.instance.setWidth(30.0)),
               child: Text(
                 "Minhas plantas",
                 style: TextStyle(
-                    fontSize: 40,
+                    fontSize: ScreenUtil.instance.setSp(35),
                     color: Colors.white,
                     fontWeight: FontWeight.w500),
                 textAlign: TextAlign.left,
