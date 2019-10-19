@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
+import 'package:auto_size_text/auto_size_text.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../providers/plantings.dart';
 
@@ -14,9 +16,20 @@ class PlantingsGrid extends StatelessWidget {
       return formatted;
     }
 
+    double defaultScreenWidth = 380.0;
+    double defaultScreenHeight = 800.0;
+    ScreenUtil.instance = ScreenUtil(
+      width: defaultScreenWidth,
+      height: defaultScreenHeight,
+      allowFontScaling: true,
+    )..init(context);
+
     return GridView.builder(
-      padding:
-          const EdgeInsets.only(top: 25.0, bottom: 25.0, left: 20, right: 20),
+      padding: EdgeInsets.only(
+          top: ScreenUtil.instance.setHeight(25.0),
+          bottom: ScreenUtil.instance.setHeight(25.0),
+          left: ScreenUtil.instance.setWidth(20),
+          right: ScreenUtil.instance.setWidth(20)),
       itemCount: plantings.items.length,
       itemBuilder: (ctx, i) => ChangeNotifierProvider.value(
         value: plantings.items[i],
@@ -28,7 +41,7 @@ class PlantingsGrid extends StatelessWidget {
                 print('clicando no item da grade');
               },
               child: Container(
-                  padding: const EdgeInsets.all(10.0),
+                  padding: EdgeInsets.all(ScreenUtil.instance.setWidth(10.0)),
                   decoration: new BoxDecoration(
                       color: Color.fromRGBO(229, 229, 229, 1),
                       borderRadius:
@@ -41,50 +54,70 @@ class PlantingsGrid extends StatelessWidget {
                         )
                       ]),
                   child: Row(children: <Widget>[
-                    CircleAvatar(
-                      radius: MediaQuery.of(context).size.width / 8,
-                      backgroundColor: Colors.transparent,
-                      backgroundImage: NetworkImage(plantings.items[i].pictureUrl),
-                    ),
                     Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        Container(
-                          margin: EdgeInsets.only(top: 10.0, left: 15.0),
-                          width: 210.0,
-                          child: Text(
-                            'Plantio - ' +
-                                _formatDate(plantings.items[i].plantingDate),
-                            style: TextStyle(
-                                fontSize: 23.0,
-                                fontWeight: FontWeight.bold,
-                                color: Color(0xff575757)),
+                        Flexible(
+                          child: Container(
+                            height: 90,
+                            width: 90,
+                            child: CircleAvatar(
+                              radius: MediaQuery.of(context).size.width / 8,
+                              backgroundColor: Colors.transparent,
+                              backgroundImage:
+                                  NetworkImage(plantings.items[i].pictureUrl),
+                            ),
                           ),
                         ),
+                      ],
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
                         Container(
-                          margin: EdgeInsets.only(top: 10.0, left: 15.0),
-                          width: 210.0,
-                          child: Text(
+                            width: ScreenUtil.instance.setWidth(210.0),
+                            margin: EdgeInsets.only(
+                                top: ScreenUtil.instance.setHeight(10.0),
+                                left: ScreenUtil.instance.setWidth(15.0)),
+                            // width: ScreenUtil.instance.setWidth(210.0),
+                            child: AutoSizeText(
+                              'Plantio - ' +
+                                  _formatDate(plantings.items[i].plantingDate),
+                              style: TextStyle(
+                                  fontSize: ScreenUtil.instance.setSp(23.0),
+                                  fontWeight: FontWeight.bold,
+                                  color: Color(0xff575757)),
+                              maxLines: 1,
+                            )),
+                        Container(
+                          margin: EdgeInsets.only(
+                              top: ScreenUtil.instance.setHeight(10.0),
+                              left: ScreenUtil.instance.setWidth(15.0)),
+                          width: ScreenUtil.instance.setWidth(210.0),
+                          child: AutoSizeText(
                             'Início do ciclo: ' +
                                 _formatDate(plantings.items[i].plantingDate),
                             style: TextStyle(
-                                fontSize: 18.0,
+                                fontSize: ScreenUtil.instance.setSp(17.0),
                                 fontWeight: FontWeight.w600,
                                 color: Color(0xff575757)),
+                            maxLines: 2,
                           ),
                         ),
                         Container(
-                          margin: EdgeInsets.only(top: 10.0, left: 15.0),
-                          width: 210.0,
-                          child: Text(
+                          margin: EdgeInsets.only(
+                              top: ScreenUtil.instance.setHeight(10.0),
+                              left: ScreenUtil.instance.setWidth(15.0)),
+                          width: ScreenUtil.instance.setWidth(210.0),
+                          child: AutoSizeText(
                             plantings.items[i].cycleFinished
                                 ? 'Fim do ciclo: Encerrado em ' +
                                     _formatDate(
                                         plantings.items[i].cycleEndingDate)
-                                : ' Fim do ciclo: Em andamento',
+                                : 'Fim do ciclo: Em andamento',
                             style: TextStyle(
-                                fontSize: 18.0,
+                                fontSize: ScreenUtil.instance.setSp(17.0),
                                 fontWeight: FontWeight.w600,
                                 color: Color(0xff575757)),
                           ),
@@ -98,7 +131,7 @@ class PlantingsGrid extends StatelessWidget {
       ),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 1,
-        childAspectRatio: 4 / 2,
+        childAspectRatio: 2 / 1,
         crossAxisSpacing: 15,
         mainAxisSpacing: 20,
       ),
