@@ -43,7 +43,7 @@ class Auth with ChangeNotifier {
 
     try {
       final response = await http.post(
-        'http://localhost:5002/api/signup',
+        'http://10.0.2.2:5002/api/signup',
         body: json.encode({"user": authData}),
         headers: {"Content-Type": "application/json"},
       );
@@ -66,7 +66,7 @@ class Auth with ChangeNotifier {
 
     try {
       final response = await http.post(
-        'http://localhost:5002/api/login',
+        'http://10.0.2.2:5002/api/login',
         body: json.encode(authData),
         headers: {"Content-Type": "application/json"},
       );
@@ -87,7 +87,7 @@ class Auth with ChangeNotifier {
 
     try {
       final response = await http.post(
-        'http://localhost:5002/api/confirm_pairing',
+        'http://10.0.2.2:5002/api/confirm_pairing',
         body: json.encode(postData),
         headers: {
           "Content-Type": "application/json",
@@ -121,7 +121,7 @@ class Auth with ChangeNotifier {
     _refreshToken = authTokens['refreshToken'];
 
     final response = await http.get(
-      'http://localhost:5002/api/get_user',
+      'http://10.0.2.2:5002/api/get_user',
       headers: {"Authorization": "Bearer $_accessToken"},
     );
 

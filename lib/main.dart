@@ -12,10 +12,19 @@ import 'package:svg_app/screens/signup.dart';
 import './screens/login.dart';
 import './screens/home.dart';
 import './screens/pairing.dart';
+import './screens/plantings_history_screen.dart';
+import './providers/plantings.dart';
+import 'package:flutter/services.dart';
+
 import './providers/auth.dart';
 import './screens/loading.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((_) {
+    runApp(new MyApp());
+  });
+}
 
 class MyApp extends StatefulWidget {
   // This widget is the root of your application.
@@ -37,7 +46,7 @@ class _MyAppState extends State<MyApp> {
         var accessToken = authTokens['accessToken'];
         _fcm.getToken().then((value) {
           http.post(
-            'http://localhost:5002/api/device_id',
+            'http://10.0.2.2:5002/api/device_id',
             body: json.encode({"deviceId": value}),
             headers: {
               "Content-Type": "application/json",
@@ -70,7 +79,10 @@ class _MyAppState extends State<MyApp> {
       providers: [
         ChangeNotifierProvider.value(
           value: Auth(),
-        )
+        ),
+        ChangeNotifierProvider.value(
+          value: Plantings(),
+        ),
       ],
       child: Consumer<Auth>(builder: (ctx, auth, _) {
         print(auth.isAuthenticated);
@@ -82,6 +94,7 @@ class _MyAppState extends State<MyApp> {
           home: _buildHome(auth),
           routes: {
             SignupScreen.routeName: (ctx) => SignupScreen(),
+            PlantingsHistory.routeName: (ctx) => PlantingsHistory(),
           },
         );
       }),
