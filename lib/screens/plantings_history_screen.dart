@@ -40,8 +40,8 @@ class _PlantingsHistoryState extends State<PlantingsHistory> {
 
   @override
   Widget build(BuildContext context) {
-    double defaultScreenWidth = 380.0;
-    double defaultScreenHeight = 800.0;
+    double defaultScreenWidth = 420.0;
+    double defaultScreenHeight = 830.0;
     ScreenUtil.instance = ScreenUtil(
       width: defaultScreenWidth,
       height: defaultScreenHeight,
@@ -61,8 +61,8 @@ class _PlantingsHistoryState extends State<PlantingsHistory> {
             color: Color.fromRGBO(144, 201, 82, 1),
             child: Container(
               margin: EdgeInsets.only(
-                              top: ScreenUtil.instance.setHeight(25.0),
-                              left: ScreenUtil.instance.setWidth(30.0)),
+                  top: ScreenUtil.instance.setHeight(25.0),
+                  left: ScreenUtil.instance.setWidth(30.0)),
               child: Text(
                 "Minhas plantas",
                 style: TextStyle(

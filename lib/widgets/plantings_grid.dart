@@ -16,8 +16,8 @@ class PlantingsGrid extends StatelessWidget {
       return formatted;
     }
 
-    double defaultScreenWidth = 380.0;
-    double defaultScreenHeight = 800.0;
+    double defaultScreenWidth = 400.0;
+    double defaultScreenHeight = 810.0;
     ScreenUtil.instance = ScreenUtil(
       width: defaultScreenWidth,
       height: defaultScreenHeight,
