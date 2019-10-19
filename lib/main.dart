@@ -13,11 +13,16 @@ import './screens/login.dart';
 import './screens/home.dart';
 import './screens/plantings_history_screen.dart';
 import './providers/plantings.dart';
-
+import 'package:flutter/services.dart';
 
 import './providers/auth.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((_) {
+    runApp(new MyApp());
+  });
+}
 
 class MyApp extends StatefulWidget {
   // This widget is the root of your application.
