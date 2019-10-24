@@ -85,7 +85,7 @@ class _MyAppState extends State<MyApp> {
         ),
       ],
       child: Consumer<Auth>(builder: (ctx, auth, _) {
-        print(auth.isAuthenticated);
+        print('authenticated: ${auth.isAuthenticated}');
         return MaterialApp(
           title: 'SVG',
           theme: ThemeData(

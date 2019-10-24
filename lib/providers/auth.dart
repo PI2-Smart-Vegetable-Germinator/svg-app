@@ -43,7 +43,7 @@ class Auth with ChangeNotifier {
 
     try {
       final response = await http.post(
-        'http://10.0.2.2:5002/api/signup',
+        'http://10.0.2.2:5002/api/signup/',
         body: json.encode({"user": authData}),
         headers: {"Content-Type": "application/json"},
       );
@@ -66,7 +66,7 @@ class Auth with ChangeNotifier {
 
     try {
       final response = await http.post(
-        'http://10.0.2.2:5002/api/login',
+        'http://10.0.2.2:5002/api/login/',
         body: json.encode(authData),
         headers: {"Content-Type": "application/json"},
       );
