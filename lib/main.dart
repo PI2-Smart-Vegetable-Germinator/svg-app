@@ -13,6 +13,8 @@ import './screens/login.dart';
 import './screens/home.dart';
 import './screens/pairing.dart';
 import './screens/plantings_history_screen.dart';
+import './widgets/image_expand.dart';
+
 import './providers/plantings.dart';
 import 'package:flutter/services.dart';
 
@@ -46,7 +48,7 @@ class _MyAppState extends State<MyApp> {
         var accessToken = authTokens['accessToken'];
         _fcm.getToken().then((value) {
           http.post(
-            'http://10.0.2.2:5002/api/device_id',
+            'http://192.168.0.8:5002/api/device_id',
             body: json.encode({"deviceId": value}),
             headers: {
               "Content-Type": "application/json",
@@ -95,6 +97,7 @@ class _MyAppState extends State<MyApp> {
           routes: {
             SignupScreen.routeName: (ctx) => SignupScreen(),
             PlantingsHistory.routeName: (ctx) => PlantingsHistory(),
+            ImageExpand.routeName: (ctx) => ImageExpand(),
           },
         );
       }),
