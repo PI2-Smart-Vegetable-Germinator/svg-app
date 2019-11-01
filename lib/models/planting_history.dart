@@ -30,7 +30,9 @@ class PlantingHistory with ChangeNotifier {
       cycleFinished: json['cycle_finished'],
       id: json['id'],
       name: json['name'],
-      pictureUrl: json['picture_url'],
+      pictureUrl: json['picture_url'] == null
+          ? ''
+          : json['picture_url'],
       plantingDate: DateTime.parse(json['planting_date']),
       seedlingId: json['seedling_id'],
     );

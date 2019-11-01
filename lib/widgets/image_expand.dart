@@ -60,23 +60,33 @@ class ImageExpand extends StatelessWidget {
           ),
         ),
         Container(
-          alignment: Alignment(ScreenUtil.instance.setWidth(0.0),
-              ScreenUtil.instance.setHeight(-0.5)),
-          margin: EdgeInsets.only(
-              top: ScreenUtil.instance.setHeight(120.0),
-              left: ScreenUtil.instance.setWidth(10.0),
-              right: ScreenUtil.instance.setWidth(10.0)),
-          child: ClipRRect(
-            borderRadius: new BorderRadius.all(const Radius.circular(30.0)),
-            child: RotatedBox(
-              quarterTurns: 5,
-              child: FadeInImage.memoryNetwork(
-                placeholder: kTransparentImage,
-                image: loadedPlanting.pictureUrl,
-              ),
-            ),
-          ),
-        )
+            alignment: Alignment(ScreenUtil.instance.setWidth(0.0),
+                ScreenUtil.instance.setHeight(-0.5)),
+            margin: EdgeInsets.only(
+                top: ScreenUtil.instance.setHeight(120.0),
+                left: ScreenUtil.instance.setWidth(10.0),
+                right: ScreenUtil.instance.setWidth(10.0)),
+            child: loadedPlanting.pictureUrl.isNotEmpty
+                ? ClipRRect(
+                    borderRadius:
+                        new BorderRadius.all(const Radius.circular(30.0)),
+                    child: RotatedBox(
+                      quarterTurns: 5,
+                      child: FadeInImage.memoryNetwork(
+                        placeholder: kTransparentImage,
+                        image: loadedPlanting.pictureUrl,
+                      ),
+                    ),
+                  )
+                : Center(
+                    child: Text(
+                      'Este ciclo não possui imagem.',
+                      style: TextStyle(
+                          fontSize: ScreenUtil.instance.setSp(30.0),
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xff575757)),
+                    ),
+                  ))
       ],
     ));
   }
