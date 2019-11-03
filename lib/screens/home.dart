@@ -3,6 +3,7 @@ import 'package:http/http.dart';
 import 'dart:convert';
 import 'package:shimmer/shimmer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -17,9 +18,9 @@ class _HomeScreenState extends State<HomeScreen> {
   int _currentTemperature = 0;
   int _hoursBacklit = 0;
   var _isLoading = false;
+  var _image;
 
   Future<void> _getCurrentInfo() async {
-    print('loading: ' + _isLoading.toString());
     try {
       Response response = await get('http://10.0.2.2:5002/api/current-info/');
       final data = json.decode(response.body);
@@ -33,12 +34,24 @@ class _HomeScreenState extends State<HomeScreen> {
         _plantingTime = data['data']['planting_time'];
         _isLoading = false;
       });
-      print('loading: ' + _isLoading.toString());
     } catch (e) {
       _isLoading = false;
-      print('loading: ' + _isLoading.toString());
       print(e);
     }
+  }
+
+  Future<void> _getCurrentImage() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final authTokens =
+        json.decode(prefs.get('authTokens')) as Map<String, Object>;
+    final accessToken = authTokens['accessToken'];
+
+    Response response = await get('http://10.0.2.2:5002/api/get-image',
+    headers: { 'Authorization': 'Bearer $accessToken' });
+    final data = response.bodyBytes;
+    setState(() {
+      _image = data;
+    });
   }
 
   @override
@@ -46,6 +59,7 @@ class _HomeScreenState extends State<HomeScreen> {
     _isLoading = true;
     super.initState();
     _getCurrentInfo();
+    _getCurrentImage();
   }
 
   @override
@@ -395,13 +409,19 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           Positioned(
             right: MediaQuery.of(context).size.width / 30.0,
-            top: ScreenUtil.instance.setHeight(150),
+            top: ScreenUtil.instance.setHeight(142),
             child: GestureDetector(
-              child: CircleAvatar(
-                radius: MediaQuery.of(context).size.width / 6.5,
-                backgroundColor: Color.fromRGBO(144, 201, 82, 1),
-                backgroundImage: NetworkImage(
-                    'https://planetahuerto-6f4f.kxcdn.com/estaticos/imagenes/articulo_revista/154/154_620x465.jpg'),
+              child: Container(
+                width: 135.0,
+                height: 135.0,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(70.0)),
+                  color: Color.fromRGBO(144, 201, 82, 1),
+                  image: _image != null ? DecorationImage(
+                    image: MemoryImage(_image),
+                    fit: BoxFit.cover
+                  ) : null
+                ),
               ),
               onTap: () {
                 Navigator.of(context).pushNamed('/plantings');
