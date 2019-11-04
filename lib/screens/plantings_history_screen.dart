@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'dart:convert';
+
 import 'package:shimmer/shimmer.dart';
+
 import '../widgets/plantings_grid.dart';
+import './loading.dart';
+
 import '../providers/plantings.dart';
+
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PlantingsHistory extends StatefulWidget {
@@ -75,7 +80,7 @@ class _PlantingsHistoryState extends State<PlantingsHistory> {
           ),
         ),
         new Expanded(
-          child: PlantingsGrid(),
+          child: _isLoading ? LoadingScreen() : PlantingsGrid(),
         ),
       ],
     ));

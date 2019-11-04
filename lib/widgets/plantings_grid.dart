@@ -4,6 +4,8 @@ import 'package:intl/intl.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import './image_expand.dart';
+
 import '../providers/plantings.dart';
 
 class PlantingsGrid extends StatelessWidget {
@@ -38,7 +40,10 @@ class PlantingsGrid extends StatelessWidget {
           child: GridTile(
             child: GestureDetector(
               onTap: () {
-                print('clicando no item da grade');
+                Navigator.of(context).pushNamed(
+                  ImageExpand.routeName,
+                  arguments: plantings.items[i].id
+                );
               },
               child: Container(
                   padding: EdgeInsets.all(ScreenUtil.instance.setWidth(10.0)),
