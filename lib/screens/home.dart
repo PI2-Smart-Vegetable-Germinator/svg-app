@@ -47,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
     final accessToken = authTokens['accessToken'];
 
     Response response = await get('http://10.0.2.2:5002/api/get-image',
-    headers: { 'Authorization': 'Bearer $accessToken' });
+        headers: {'Authorization': 'Bearer $accessToken'});
     final data = response.bodyBytes;
     setState(() {
       _image = data;
@@ -73,17 +73,43 @@ class _HomeScreenState extends State<HomeScreen> {
     )..init(context);
 
     return Scaffold(
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          // Add your onPressed code here!
-        },
-        label: Text('Irrigar',
-            style: TextStyle(fontSize: ScreenUtil.instance.setSp(16.0))),
-        icon: Icon(
-          Icons.spa,
-          size: 30.0,
-        ),
-        backgroundColor: Color(0xff89C34B),
+      floatingActionButton: Stack(
+        children: <Widget>[
+          Padding(
+            padding: EdgeInsets.only(left: ScreenUtil.instance.setWidth(31)),
+            child: Align(
+              alignment: Alignment.bottomLeft,
+              child: FloatingActionButton.extended(
+                onPressed: () {
+                  print('iluminar');
+                },
+                label: Text('Iluminar',
+                    style:
+                        TextStyle(fontSize: ScreenUtil.instance.setSp(16.0))),
+                icon: Icon(
+                  Icons.brightness_high,
+                  size: 30.0,
+                ),
+                backgroundColor: Colors.orangeAccent,
+              ),
+            ),
+          ),
+          Align(
+            alignment: Alignment.bottomRight,
+            child: FloatingActionButton.extended(
+              onPressed: () {
+                print('irrigar');
+              },
+              label: Text('Irrigar',
+                  style: TextStyle(fontSize: ScreenUtil.instance.setSp(16.0))),
+              icon: Icon(
+                Icons.opacity,
+                size: 30.0,
+              ),
+              backgroundColor: Colors.blueAccent,
+            ),
+          ),
+        ],
       ),
       body: Stack(
         children: <Widget>[
@@ -415,13 +441,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 width: 135.0,
                 height: 135.0,
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(70.0)),
-                  color: Color.fromRGBO(144, 201, 82, 1),
-                  image: _image != null ? DecorationImage(
-                    image: MemoryImage(_image),
-                    fit: BoxFit.cover
-                  ) : null
-                ),
+                    borderRadius: BorderRadius.all(Radius.circular(70.0)),
+                    color: Color.fromRGBO(144, 201, 82, 1),
+                    image: _image != null
+                        ? DecorationImage(
+                            image: MemoryImage(_image), fit: BoxFit.cover)
+                        : null),
               ),
               onTap: () {
                 Navigator.of(context).pushNamed('/plantings');
