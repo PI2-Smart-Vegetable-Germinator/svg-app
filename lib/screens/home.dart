@@ -22,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _getCurrentInfo() async {
     try {
-      Response response = await get('http://10.0.2.2:5002/api/current-info/');
+      Response response = await get('http://192.168.0.8:5002/api/current-info');
       final data = json.decode(response.body);
 
       setState(() {
@@ -46,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
         json.decode(prefs.get('authTokens')) as Map<String, Object>;
     final accessToken = authTokens['accessToken'];
 
-    Response response = await get('http://10.0.2.2:5002/api/get-image',
+    Response response = await get('http://192.168.0.8:5002/api/get-image',
         headers: {'Authorization': 'Bearer $accessToken'});
     final data = response.bodyBytes;
     setState(() {
@@ -80,6 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
             child: Align(
               alignment: Alignment.bottomLeft,
               child: FloatingActionButton.extended(
+                heroTag: 'iluminar',
                 onPressed: () {
                   print('iluminar');
                 },
@@ -88,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         TextStyle(fontSize: ScreenUtil.instance.setSp(16.0))),
                 icon: Icon(
                   Icons.brightness_high,
-                  size: 30.0,
+                  size: ScreenUtil.instance.setSp(30.0),
                 ),
                 backgroundColor: Colors.orangeAccent,
               ),
@@ -97,6 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Align(
             alignment: Alignment.bottomRight,
             child: FloatingActionButton.extended(
+              heroTag: 'irrigar',
               onPressed: () {
                 print('irrigar');
               },
@@ -104,7 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   style: TextStyle(fontSize: ScreenUtil.instance.setSp(16.0))),
               icon: Icon(
                 Icons.opacity,
-                size: 30.0,
+                size: ScreenUtil.instance.setSp(30.0),
               ),
               backgroundColor: Colors.blueAccent,
             ),
@@ -123,25 +125,25 @@ class _HomeScreenState extends State<HomeScreen> {
               color: Color.fromRGBO(144, 201, 82, 1),
               child: Column(
                 children: <Widget>[
-                  Center(
-                      child: GestureDetector(
-                          child: Container(
-                              height: ScreenUtil.instance.setHeight(60),
-                              width: MediaQuery.of(context).size.width,
-                              child: Icon(
-                                Icons.keyboard_arrow_down,
-                                size: MediaQuery.of(context).size.width / 5.5,
-                                color: Colors.white,
-                              )),
-                          onTap: () {
-                            print('puta vida !!!');
-                          })),
+                  // Center(
+                  //     child: GestureDetector(
+                  //         child: Container(
+                  //             height: ScreenUtil.instance.setHeight(60),
+                  //             width: MediaQuery.of(context).size.width,
+                  //             child: Icon(
+                  //               Icons.keyboard_arrow_down,
+                  //               size: MediaQuery.of(context).size.width / 5.5,
+                  //               color: Colors.white,
+                  //             )),
+                  //         onTap: () {
+                  //           print('puta vida !!!');
+                  //         })),
                   Container(
                     width: double.infinity,
                     margin: EdgeInsets.only(
                         left: ScreenUtil.instance.setWidth(30),
                         right: ScreenUtil.instance.setWidth(30.0),
-                        top: ScreenUtil.instance.setHeight(5.0)),
+                        top: ScreenUtil.instance.setHeight(40.0)),
                     child: _isLoading
                         ? Shimmer.fromColors(
                             baseColor: Colors.grey[500],
