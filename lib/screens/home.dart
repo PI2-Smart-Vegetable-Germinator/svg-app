@@ -125,25 +125,12 @@ class _HomeScreenState extends State<HomeScreen> {
               color: Color.fromRGBO(144, 201, 82, 1),
               child: Column(
                 children: <Widget>[
-                  // Center(
-                  //     child: GestureDetector(
-                  //         child: Container(
-                  //             height: ScreenUtil.instance.setHeight(60),
-                  //             width: MediaQuery.of(context).size.width,
-                  //             child: Icon(
-                  //               Icons.keyboard_arrow_down,
-                  //               size: MediaQuery.of(context).size.width / 5.5,
-                  //               color: Colors.white,
-                  //             )),
-                  //         onTap: () {
-                  //           print('puta vida !!!');
-                  //         })),
                   Container(
                     width: double.infinity,
                     margin: EdgeInsets.only(
                         left: ScreenUtil.instance.setWidth(30),
                         right: ScreenUtil.instance.setWidth(30.0),
-                        top: ScreenUtil.instance.setHeight(40.0)),
+                        top: ScreenUtil.instance.setHeight(50.0)),
                     child: _isLoading
                         ? Shimmer.fromColors(
                             baseColor: Colors.grey[500],
@@ -157,7 +144,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         : Text(
                             _plantingTime.toString() + " dias de estufa",
                             style: TextStyle(
-                                fontSize: ScreenUtil.instance.setSp(35.0),
+                                fontSize: ScreenUtil.instance.setSp(38.0),
                                 color: Colors.white,
                                 fontWeight: FontWeight.w500),
                             textAlign: TextAlign.left,
@@ -168,7 +155,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     margin: EdgeInsets.only(
                         left: ScreenUtil.instance.setWidth(30),
                         right: ScreenUtil.instance.setWidth(30.0),
-                        top: ScreenUtil.instance.setHeight(13.0)),
+                        top: ScreenUtil.instance.setHeight(18.0)),
                     child: _isLoading
                         ? Shimmer.fromColors(
                             baseColor: Colors.grey[500],
@@ -362,74 +349,81 @@ class _HomeScreenState extends State<HomeScreen> {
                         ],
                       )
                     ])),
-                Container(
-                  padding: EdgeInsets.all(ScreenUtil.instance.setHeight(10.0)),
-                  decoration: new BoxDecoration(
-                      color: Color(0xffF1F2F2),
-                      borderRadius:
-                          new BorderRadius.all(const Radius.circular(15.0)),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black38,
-                          blurRadius: 4.5,
-                          offset: Offset(5.0, 5.0),
-                        )
-                      ]),
-                  child: Row(
-                    children: <Widget>[
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Flexible(
-                            child: Icon(Icons.wb_cloudy,
-                                color: Color(0xff3499C1), size: 80.0),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: <Widget>[
-                          Container(
-                            margin: EdgeInsets.only(
-                                top: ScreenUtil.instance.setHeight(15.0),
-                                left: ScreenUtil.instance.setWidth(12.0)),
-                            width: ScreenUtil.instance.setWidth(220.0),
-                            child: Text(
-                              'Umidade',
-                              style: TextStyle(
-                                  fontSize: ScreenUtil.instance.setSp(23.0),
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xff575757)),
+                GestureDetector(
+                  onTap: () {
+                    print('configurar irrigacao');
+                    Navigator.of(context).pushNamed('/irrigation-config');
+                  },
+                  child: Container(
+                    padding:
+                        EdgeInsets.all(ScreenUtil.instance.setHeight(10.0)),
+                    decoration: new BoxDecoration(
+                        color: Color(0xffF1F2F2),
+                        borderRadius:
+                            new BorderRadius.all(const Radius.circular(15.0)),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black38,
+                            blurRadius: 4.5,
+                            offset: Offset(5.0, 5.0),
+                          )
+                        ]),
+                    child: Row( 
+                      children: <Widget>[
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Flexible(
+                              child: Icon(Icons.wb_cloudy,
+                                  color: Color(0xff3499C1), size: 80.0),
                             ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(
-                                top: ScreenUtil.instance.setHeight(16.0)),
-                            width: ScreenUtil.instance.setWidth(100.0),
-                            child: _isLoading
-                                ? Shimmer.fromColors(
-                                    baseColor: Colors.grey[500],
-                                    highlightColor: Colors.white,
-                                    child: Container(
-                                      width: double.infinity / 2,
-                                      height:
-                                          ScreenUtil.instance.setHeight(25.0),
-                                      color: Colors.white70,
+                          ],
+                        ),
+                        Column(
+                          children: <Widget>[
+                            Container(
+                              margin: EdgeInsets.only(
+                                  top: ScreenUtil.instance.setHeight(15.0),
+                                  left: ScreenUtil.instance.setWidth(12.0)),
+                              width: ScreenUtil.instance.setWidth(220.0),
+                              child: Text(
+                                'Umidade',
+                                style: TextStyle(
+                                    fontSize: ScreenUtil.instance.setSp(23.0),
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xff575757)),
+                              ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(
+                                  top: ScreenUtil.instance.setHeight(16.0)),
+                              width: ScreenUtil.instance.setWidth(100.0),
+                              child: _isLoading
+                                  ? Shimmer.fromColors(
+                                      baseColor: Colors.grey[500],
+                                      highlightColor: Colors.white,
+                                      child: Container(
+                                        width: double.infinity / 2,
+                                        height:
+                                            ScreenUtil.instance.setHeight(25.0),
+                                        color: Colors.white70,
+                                      ),
+                                    )
+                                  : Text(
+                                      '$_currentHumidity' + '%',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize:
+                                              ScreenUtil.instance.setSp(35.0),
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xff575757)),
                                     ),
-                                  )
-                                : Text(
-                                    '$_currentHumidity' + '%',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize:
-                                            ScreenUtil.instance.setSp(35.0),
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xff575757)),
-                                  ),
-                          ),
-                        ],
-                      ),
-                    ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               ],
