@@ -5,6 +5,8 @@ import 'package:shimmer/shimmer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:fluttertoast/fluttertoast.dart';
+
 class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -76,13 +78,22 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: Stack(
         children: <Widget>[
           Padding(
-            padding: EdgeInsets.only(left: ScreenUtil.instance.setWidth(31)),
+            padding: EdgeInsets.only(left: ScreenUtil.instance.setWidth(31.0)),
             child: Align(
               alignment: Alignment.bottomLeft,
               child: FloatingActionButton.extended(
                 heroTag: 'iluminar',
                 onPressed: () {
+                  // TODO acionar iluminação instantânea
                   print('iluminar');
+                  Fluttertoast.showToast(
+                      msg: "A SVG acionará a iluminação em breve!",
+                      toastLength: Toast.LENGTH_LONG,
+                      gravity: ToastGravity.BOTTOM,
+                      timeInSecForIos: 1,
+                      backgroundColor: Color.fromRGBO(78, 78, 78, 1),
+                      textColor: Colors.white,
+                      fontSize: 18.0);
                 },
                 label: Text('Iluminar',
                     style:
@@ -100,7 +111,16 @@ class _HomeScreenState extends State<HomeScreen> {
             child: FloatingActionButton.extended(
               heroTag: 'irrigar',
               onPressed: () {
+                // TODO acionar irrigação instantânea
                 print('irrigar');
+                Fluttertoast.showToast(
+                    msg: "A SVG iniciará a irrigação em breve!",
+                    toastLength: Toast.LENGTH_LONG,
+                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIos: 1,
+                    backgroundColor: Color.fromRGBO(78, 78, 78, 1),
+                    textColor: Colors.white,
+                    fontSize: 18.0);
               },
               label: Text('Irrigar',
                   style: TextStyle(fontSize: ScreenUtil.instance.setSp(16.0))),
