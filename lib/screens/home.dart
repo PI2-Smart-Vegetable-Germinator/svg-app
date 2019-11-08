@@ -282,73 +282,79 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 ),
-                Container(
-                    padding:
-                        EdgeInsets.all(ScreenUtil.instance.setHeight(10.0)),
-                    decoration: new BoxDecoration(
-                        color: Color(0xffF1F2F2),
-                        borderRadius:
-                            new BorderRadius.all(const Radius.circular(15.0)),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black38,
-                            blurRadius: 4.5,
-                            offset: Offset(5.0, 5.0),
-                          )
-                        ]),
-                    child: Row(children: <Widget>[
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Flexible(
-                            child: Icon(Icons.wb_sunny,
-                                color: Color(0xffFFC107), size: 90.0),
-                          ),
-                        ],
-                      ),
-                      Column(
-                        children: <Widget>[
-                          Container(
-                            margin: EdgeInsets.only(
-                                top: ScreenUtil.instance.setHeight(15.0)),
-                            width: ScreenUtil.instance.setWidth(220.0),
-                            child: Text(
-                              'Tempo de iluminação',
-                              style: TextStyle(
-                                  fontSize: ScreenUtil.instance.setSp(21.5),
-                                  fontWeight: FontWeight.bold,
-                                  color: Color(0xff575757)),
+                GestureDetector(
+                  onTap: () {
+                    print('configurar iluminação');
+                    Navigator.of(context).pushNamed('/illumination-config');
+                  },
+                  child: Container(
+                      padding:
+                          EdgeInsets.all(ScreenUtil.instance.setHeight(10.0)),
+                      decoration: new BoxDecoration(
+                          color: Color(0xffF1F2F2),
+                          borderRadius:
+                              new BorderRadius.all(const Radius.circular(15.0)),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black38,
+                              blurRadius: 4.5,
+                              offset: Offset(5.0, 5.0),
+                            )
+                          ]),
+                      child: Row(children: <Widget>[
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Flexible(
+                              child: Icon(Icons.wb_sunny,
+                                  color: Color(0xffFFC107), size: 90.0),
                             ),
-                          ),
-                          Container(
-                            margin: EdgeInsets.only(
-                                top: ScreenUtil.instance.setHeight(16.0)),
-                            width: ScreenUtil.instance.setWidth(100.0),
-                            child: _isLoading
-                                ? Shimmer.fromColors(
-                                    baseColor: Colors.grey[500],
-                                    highlightColor: Colors.white,
-                                    child: Container(
-                                      width: double.infinity / 2,
-                                      height:
-                                          ScreenUtil.instance.setHeight(25.0),
-                                      color: Colors.white70,
+                          ],
+                        ),
+                        Column(
+                          children: <Widget>[
+                            Container(
+                              margin: EdgeInsets.only(
+                                  top: ScreenUtil.instance.setHeight(15.0)),
+                              width: ScreenUtil.instance.setWidth(220.0),
+                              child: Text(
+                                'Tempo de iluminação',
+                                style: TextStyle(
+                                    fontSize: ScreenUtil.instance.setSp(21.5),
+                                    fontWeight: FontWeight.bold,
+                                    color: Color(0xff575757)),
+                              ),
+                            ),
+                            Container(
+                              margin: EdgeInsets.only(
+                                  top: ScreenUtil.instance.setHeight(16.0)),
+                              width: ScreenUtil.instance.setWidth(100.0),
+                              child: _isLoading
+                                  ? Shimmer.fromColors(
+                                      baseColor: Colors.grey[500],
+                                      highlightColor: Colors.white,
+                                      child: Container(
+                                        width: double.infinity / 2,
+                                        height:
+                                            ScreenUtil.instance.setHeight(25.0),
+                                        color: Colors.white70,
+                                      ),
+                                    )
+                                  : Text(
+                                      '$_hoursBacklit' + 'h',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize:
+                                              ScreenUtil.instance.setSp(35.0),
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xff575757)),
                                     ),
-                                  )
-                                : Text(
-                                    '$_hoursBacklit' + 'h',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize:
-                                            ScreenUtil.instance.setSp(35.0),
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xff575757)),
-                                  ),
-                          )
-                        ],
-                      )
-                    ])),
+                            )
+                          ],
+                        )
+                      ])),
+                ),
                 GestureDetector(
                   onTap: () {
                     print('configurar irrigacao');
@@ -368,7 +374,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             offset: Offset(5.0, 5.0),
                           )
                         ]),
-                    child: Row( 
+                    child: Row(
                       children: <Widget>[
                         Column(
                           mainAxisAlignment: MainAxisAlignment.center,

@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
-
-import './loading.dart';
-
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class IrrigationConfig extends StatefulWidget {
-  static const routeName = '/irrigation-config';
+class IlluminationConfig extends StatefulWidget {
+  static const routeName = '/illumination-config';
 
   @override
-  _IrrigationConfigState createState() => _IrrigationConfigState();
+  _IlluminationConfigState createState() => _IlluminationConfigState();
 }
 
-class _IrrigationConfigState extends State<IrrigationConfig> {
-  bool irrigationStatus = false;
+class _IlluminationConfigState extends State<IlluminationConfig> {
+  bool illuminationStatus = false;
   // TODO setar estados de loading nas requisições
   var _isLoading = false;
 
@@ -51,7 +48,7 @@ class _IrrigationConfigState extends State<IrrigationConfig> {
                       top: ScreenUtil.instance.setHeight(40.0),
                       left: ScreenUtil.instance.setWidth(0)),
                   child: Text(
-                    "Irrigação",
+                    "Iluminação",
                     style: TextStyle(
                         fontSize: ScreenUtil.instance.setSp(45),
                         color: Colors.white,
@@ -80,10 +77,10 @@ class _IrrigationConfigState extends State<IrrigationConfig> {
                               child: Checkbox(
                                 activeColor: Color.fromRGBO(144, 201, 82, 1),
                                 checkColor: Colors.white,
-                                value: irrigationStatus,
+                                value: illuminationStatus,
                                 onChanged: (bool value) {
                                   setState(() {
-                                    irrigationStatus = value;
+                                    illuminationStatus = value;
                                   });
                                 },
                               )),
@@ -98,9 +95,9 @@ class _IrrigationConfigState extends State<IrrigationConfig> {
                                 left: ScreenUtil.instance.setWidth(05.0)),
                             width: ScreenUtil.instance.setWidth(250.0),
                             child: Text(
-                              'Irrigação sob demanda',
+                              'Iluminação sob demanda',
                               style: TextStyle(
-                                  fontSize: ScreenUtil.instance.setSp(26.0),
+                                  fontSize: ScreenUtil.instance.setSp(24.0),
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white),
                             ),
@@ -123,7 +120,7 @@ class _IrrigationConfigState extends State<IrrigationConfig> {
                       width: ScreenUtil.instance.setWidth(350),
                       height: ScreenUtil.instance.setHeight(220),
                       child: Text(
-                        'Irrigar sempre que a umidade estiver abaixo de 20%.\n\nVocê será notificado sempre que as mudas forem irrigadas.',
+                        'A iluminação sempre é ativada quando os sensores detectam a falta de luz.\n\nVocê será notificado quando a iluminação for ativada.',
                         style: TextStyle(
                             fontSize: ScreenUtil.instance.setSp(23.0),
                             fontWeight: FontWeight.w400,

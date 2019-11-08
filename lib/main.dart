@@ -15,6 +15,7 @@ import './screens/pairing.dart';
 import './screens/plantings_history_screen.dart';
 import './widgets/image_expand.dart';
 import './screens/irrigation_config.dart';
+import './screens/illumination_config.dart';
 
 import './providers/plantings.dart';
 import 'package:flutter/services.dart';
@@ -99,7 +100,8 @@ class _MyAppState extends State<MyApp> {
             SignupScreen.routeName: (ctx) => SignupScreen(),
             PlantingsHistory.routeName: (ctx) => PlantingsHistory(),
             ImageExpand.routeName: (ctx) => ImageExpand(),
-            IrrigationConfig.routeName: (ctx) => IrrigationConfig()
+            IrrigationConfig.routeName: (ctx) => IrrigationConfig(),
+            IlluminationConfig.routeName: (ctx) => IlluminationConfig()
           },
         );
       }),
