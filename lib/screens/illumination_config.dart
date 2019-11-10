@@ -133,9 +133,6 @@ class _IlluminationConfigState extends State<IlluminationConfig> {
             ),
           ),
         ),
-        // new Expanded(
-        //   child: _isLoading ? LoadingScreen() : PlantingsGrid(),
-        // ),
       ],
     ));
   }
