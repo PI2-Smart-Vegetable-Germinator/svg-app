@@ -170,7 +170,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         margin: EdgeInsets.only(
                             left: ScreenUtil.instance.setWidth(30),
                             right: ScreenUtil.instance.setWidth(30.0),
-                            top: ScreenUtil.instance.setHeight(50.0)),
+                            top: ScreenUtil.instance.setHeight(40.0)),
                         child: _isLoading
                             ? Shimmer.fromColors(
                                 baseColor: Colors.grey[500],
@@ -195,7 +195,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         margin: EdgeInsets.only(
                             left: ScreenUtil.instance.setWidth(30),
                             right: ScreenUtil.instance.setWidth(30.0),
-                            top: ScreenUtil.instance.setHeight(18.0)),
+                            top: ScreenUtil.instance.setHeight(22.0)),
                         child: _isLoading
                             ? Shimmer.fromColors(
                                 baseColor: Colors.grey[500],
@@ -231,7 +231,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   color: Colors.white70,
                                 ),
                               )
-                            : Text(
+                            : Text( _remainingDays <= 0 ? "Hora de colher suas mudas!" :
                                 _remainingDays.toString() +
                                     " dias até a colheita",
                                 style: TextStyle(
