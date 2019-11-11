@@ -14,6 +14,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   String _plantingName = '';
+  int _plantingId = 0;
   int _plantingTime = 0;
   int _remainingDays = 0;
   int _currentHumidity = 0;
@@ -40,6 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
       final data = json.decode(response.body);
 
       setState(() {
+        _plantingId = data['data']['planting_id'];
         _currentHumidity = data['data']['current_humidity'];
         _currentTemperature = data['data']['current_temperature'];
         _remainingDays = data['data']['cycle_remaining_days'];
@@ -69,6 +71,40 @@ class _HomeScreenState extends State<HomeScreen> {
       _image = data;
       _isLoading = false;
     });
+  }
+
+  Future<void> startIrrigation() async {
+    var payload = {'plantingId': this._plantingId};
+
+    try {
+      final response = await post(
+        'http://192.168.0.8:5002/api/app/start_irrigation',
+        body: json.encode(payload),
+        headers: {"Content-Type": "application/json"},
+      );
+
+      await endIrrigation();
+
+      print(response.statusCode);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  Future<void> endIrrigation() async {
+    var payload = {'plantingId': this._plantingId};
+
+    try {
+      final response = await post(
+        'http://192.168.0.8:5002/api/app/end_irrigation',
+        body: json.encode(payload),
+        headers: {"Content-Type": "application/json"},
+      );
+
+      print(response.statusCode);
+    } catch (error) {
+      throw error;
+    }
   }
 
   @override
@@ -130,8 +166,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: FloatingActionButton.extended(
                   heroTag: 'irrigar',
                   onPressed: () {
-                    // TODO acionar irrigação instantânea
-                    print('irrigar');
+                    startIrrigation();
                     Fluttertoast.showToast(
                         msg: "A SVG iniciará a irrigação em breve!",
                         toastLength: Toast.LENGTH_LONG,
@@ -231,9 +266,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                   color: Colors.white70,
                                 ),
                               )
-                            : Text( _remainingDays <= 0 ? "Hora de colher suas mudas!" :
-                                _remainingDays.toString() +
-                                    " dias até a colheita",
+                            : Text(
+                                _remainingDays <= 0
+                                    ? "Hora de colher suas mudas!"
+                                    : _remainingDays.toString() +
+                                        " dias até a colheita",
                                 style: TextStyle(
                                     fontSize: ScreenUtil.instance.setSp(19.0),
                                     color: Colors.white,
@@ -552,7 +589,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     fontSize: ScreenUtil.instance.setSp(28.0),
                     fontWeight: FontWeight.bold,
                     color: Color(0xff575757),
-                    letterSpacing: 1.5, height: 1.5 ),
+                    letterSpacing: 1.5,
+                    height: 1.5),
                 textAlign: TextAlign.center,
               ),
             )
