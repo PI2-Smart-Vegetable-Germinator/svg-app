@@ -30,8 +30,6 @@ class Plantings with ChangeNotifier {
       var data = json.decode(response.body) as Map<String, dynamic>;
       var extractedData = data['data']['plantings_history'];
 
-      // print(extractedData);
-
       final plantingsData = extractedData
           .map<PlantingHistory>((json) => PlantingHistory.fromJson(json))
           .toList();

@@ -19,6 +19,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _remainingDays = 0;
   int _currentHumidity = 0;
   int _currentTemperature = 0;
+  bool _currentlyBacklit = null;
   int _hoursBacklit = 0;
   var _activePlanting = false;
   var _isLoading = false;
@@ -44,6 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
         _plantingId = data['data']['planting_id'];
         _currentHumidity = data['data']['current_humidity'];
         _currentTemperature = data['data']['current_temperature'];
+        _currentlyBacklit = data['data']['currently_backlit'];
         _remainingDays = data['data']['cycle_remaining_days'];
         _hoursBacklit = data['data']['hours_backlit'];
         _plantingName = data['data']['planting_name'];
@@ -84,8 +86,20 @@ class _HomeScreenState extends State<HomeScreen> {
       );
 
       await endIrrigation();
+    } catch (error) {
+      throw error;
+    }
+  }
 
-      print(response.statusCode);
+  Future<void> startIllumination() async {
+    var payload = {'plantingId': this._plantingId};
+
+    try {
+      final response = await post(
+        'http://192.168.0.8:5002/api/app/start_illumination',
+        body: json.encode(payload),
+        headers: {"Content-Type": "application/json"},
+      );
     } catch (error) {
       throw error;
     }
@@ -100,8 +114,20 @@ class _HomeScreenState extends State<HomeScreen> {
         body: json.encode(payload),
         headers: {"Content-Type": "application/json"},
       );
+    } catch (error) {
+      throw error;
+    }
+  }
 
-      print(response.statusCode);
+  Future<void> endIllumination() async {
+    var payload = {'plantingId': this._plantingId};
+
+    try {
+      final response = await post(
+        'http://192.168.0.8:5002/api/app/end_illumination',
+        body: json.encode(payload),
+        headers: {"Content-Type": "application/json"},
+      );
     } catch (error) {
       throw error;
     }
@@ -139,16 +165,33 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: FloatingActionButton.extended(
                     heroTag: 'iluminar',
                     onPressed: () {
-                      // TODO acionar iluminação instantânea
-                      print('iluminar');
-                      Fluttertoast.showToast(
-                          msg: "A SVG acionará a iluminação em breve!",
-                          toastLength: Toast.LENGTH_LONG,
-                          gravity: ToastGravity.BOTTOM,
-                          timeInSecForIos: 1,
-                          backgroundColor: Color.fromRGBO(78, 78, 78, 1),
-                          textColor: Colors.white,
-                          fontSize: 18.0);
+                      if (_currentlyBacklit) {
+                        endIllumination();
+                        _currentlyBacklit = false;
+                        _getCurrentInfo();
+
+                        Fluttertoast.showToast(
+                            msg: "A SVG desligará a iluminação em breve!",
+                            toastLength: Toast.LENGTH_LONG,
+                            gravity: ToastGravity.BOTTOM,
+                            timeInSecForIos: 1,
+                            backgroundColor: Color.fromRGBO(78, 78, 78, 1),
+                            textColor: Colors.white,
+                            fontSize: 18.0);
+                      } else {
+                        startIllumination();
+                        _currentlyBacklit = true;
+                        _getCurrentInfo();
+
+                        Fluttertoast.showToast(
+                            msg: "A SVG acionará a iluminação em breve!",
+                            toastLength: Toast.LENGTH_LONG,
+                            gravity: ToastGravity.BOTTOM,
+                            timeInSecForIos: 1,
+                            backgroundColor: Color.fromRGBO(78, 78, 78, 1),
+                            textColor: Colors.white,
+                            fontSize: 18.0);
+                      }
                     },
                     label: Text('Iluminar',
                         style: TextStyle(
