@@ -21,6 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _currentTemperature = 0;
   bool _currentlyBacklit = null;
   int _hoursBacklit = 0;
+  int _sproutedSeedlings= 0;
   var _activePlanting = false;
   var _isLoading = false;
   var _loadPage = false;
@@ -35,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     try {
       Response response =
-          await get('http://192.168.0.8:5002/api/current-info/', headers: {
+          await get('http://192.168.100.177:5002/api/current-info', headers: {
         'Authorization': 'Bearer $accessToken',
       });
 
@@ -51,6 +52,7 @@ class _HomeScreenState extends State<HomeScreen> {
         _plantingName = data['data']['planting_name'];
         _plantingTime = data['data']['planting_time'];
         _activePlanting = data['data']['active_planting'];
+        _sproutedSeedlings = data['data']['sprouted_seedlings'];
         _isLoading = false;
       });
     } catch (e) {
@@ -65,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
         json.decode(prefs.get('authTokens')) as Map<String, Object>;
     final accessToken = authTokens['accessToken'];
 
-    Response response = await get('http://192.168.0.8:5002/api/get-image',
+    Response response = await get('http://192.168.100.177:5002/api/get-image',
         headers: {'Authorization': 'Bearer $accessToken'});
     final data = response.bodyBytes;
 
@@ -80,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     try {
       final response = await post(
-        'http://192.168.0.8:5002/api/app/start_irrigation',
+        'http://192.168.100.177:5002/api/app/start_irrigation',
         body: json.encode(payload),
         headers: {"Content-Type": "application/json"},
       );
@@ -96,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     try {
       final response = await post(
-        'http://192.168.0.8:5002/api/app/start_illumination',
+        'http://192.168.100.177:5002/api/app/start_illumination',
         body: json.encode(payload),
         headers: {"Content-Type": "application/json"},
       );
@@ -110,7 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     try {
       final response = await post(
-        'http://192.168.0.8:5002/api/app/end_irrigation',
+        'http://192.168.100.177:5002/api/app/end_irrigation',
         body: json.encode(payload),
         headers: {"Content-Type": "application/json"},
       );
@@ -124,7 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     try {
       final response = await post(
-        'http://192.168.0.8:5002/api/app/end_illumination',
+        'http://192.168.100.177:5002/api/app/end_illumination',
         body: json.encode(payload),
         headers: {"Content-Type": "application/json"},
       );
@@ -169,7 +171,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         endIllumination();
                         _currentlyBacklit = false;
                         _getCurrentInfo();
-
                         Fluttertoast.showToast(
                             msg: "A SVG desligará a iluminação em breve!",
                             toastLength: Toast.LENGTH_LONG,
@@ -182,7 +183,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         startIllumination();
                         _currentlyBacklit = true;
                         _getCurrentInfo();
-
                         Fluttertoast.showToast(
                             msg: "A SVG acionará a iluminação em breve!",
                             toastLength: Toast.LENGTH_LONG,
@@ -285,7 +285,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               )
                             : Text(
-                                "100% das mudas germinaram",
+                                _sproutedSeedlings.toString() + "% das mudas germinaram",
                                 style: TextStyle(
                                     fontSize: ScreenUtil.instance.setSp(19.0),
                                     color: Colors.white,
