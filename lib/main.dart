@@ -42,6 +42,7 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
+
     SharedPreferences.getInstance().then((instance) {
       if (instance.containsKey('authTokens')) {
         final authTokens =
@@ -50,7 +51,7 @@ class _MyAppState extends State<MyApp> {
         var accessToken = authTokens['accessToken'];
         _fcm.getToken().then((value) {
           http.post(
-            'http://192.168.0.8:5002/api/device_id',
+            'http://10.0.2.2:5002/api/device_id',
             body: json.encode({"deviceId": value}),
             headers: {
               "Content-Type": "application/json",

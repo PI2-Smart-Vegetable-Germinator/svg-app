@@ -5,6 +5,8 @@ import 'package:shimmer/shimmer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
+
 import 'package:fluttertoast/fluttertoast.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -13,6 +15,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final _fcm = FirebaseMessaging();
+
   String _plantingName = '';
   int _plantingId = 0;
   int _plantingTime = 0;
@@ -21,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _currentTemperature = 0;
   bool _currentlyBacklit = null;
   int _hoursBacklit = 0;
-  int _sproutedSeedlings= 0;
+  int _sproutedSeedlings = 0;
   var _activePlanting = false;
   var _isLoading = false;
   var _loadPage = false;
@@ -36,7 +40,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     try {
       Response response =
-          await get('http://192.168.100.177:5002/api/current-info', headers: {
+          await get('http://10.0.2.2:5002/api/current-info', headers: {
         'Authorization': 'Bearer $accessToken',
       });
 
@@ -67,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
         json.decode(prefs.get('authTokens')) as Map<String, Object>;
     final accessToken = authTokens['accessToken'];
 
-    Response response = await get('http://192.168.100.177:5002/api/get-image',
+    Response response = await get('http://10.0.2.2:5002/api/get-image',
         headers: {'Authorization': 'Bearer $accessToken'});
     final data = response.bodyBytes;
 
@@ -82,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     try {
       final response = await post(
-        'http://192.168.100.177:5002/api/app/start_irrigation',
+        'http://10.0.2.2:5002/api/app/start_irrigation',
         body: json.encode(payload),
         headers: {"Content-Type": "application/json"},
       );
@@ -98,7 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     try {
       final response = await post(
-        'http://192.168.100.177:5002/api/app/start_illumination',
+        'http://10.0.2.2:5002/api/app/start_illumination',
         body: json.encode(payload),
         headers: {"Content-Type": "application/json"},
       );
@@ -112,7 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     try {
       final response = await post(
-        'http://192.168.100.177:5002/api/app/end_irrigation',
+        'http://10.0.2.2:5002/api/app/end_irrigation',
         body: json.encode(payload),
         headers: {"Content-Type": "application/json"},
       );
@@ -126,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     try {
       final response = await post(
-        'http://192.168.100.177:5002/api/app/end_illumination',
+        'http://10.0.2.2:5002/api/app/end_illumination',
         body: json.encode(payload),
         headers: {"Content-Type": "application/json"},
       );
@@ -135,8 +139,42 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  void _updateInfoFromDataNotification(dynamic data) {
+    final Map<String, String> castData = Map.from(data);
+
+    setState(() {
+      _currentHumidity = int.parse(castData['currentHumidity']);
+      _currentTemperature = int.parse(castData['currentTemperature']);
+    });
+  }
+
   @override
   void initState() {
+    _fcm.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        var data = message['data'];
+        if (data['code'] == "SVG_PLANTING_STARTED") {
+          _getCurrentInfo();
+        } else if (data['code'] == "SVG_UPDATE_DATA") {
+          _updateInfoFromDataNotification(data);
+        }
+      },
+      onResume: (Map<String, dynamic> message) async {
+        var data = message['data'];
+
+        if (data['code'] == "SVG_PLANTING_STARTED") {
+          _getCurrentInfo();
+        }
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        var data = message['data'];
+
+        if (data['code'] == "SVG_PLANTING_STARTED") {
+          _getCurrentInfo();
+        }
+      },
+    );
+
     _isLoading = true;
     super.initState();
     _getCurrentInfo();
@@ -285,7 +323,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               )
                             : Text(
-                                _sproutedSeedlings.toString() + "% das mudas germinaram",
+                                _sproutedSeedlings.toString() +
+                                    "% das mudas germinaram",
                                 style: TextStyle(
                                     fontSize: ScreenUtil.instance.setSp(19.0),
                                     color: Colors.white,
