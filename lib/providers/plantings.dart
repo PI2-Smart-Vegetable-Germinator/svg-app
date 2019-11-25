@@ -23,7 +23,7 @@ class Plantings with ChangeNotifier {
 
     try {
       Response response =
-          await get('http://192.168.0.8:5002/api/plantings-history', headers: {
+          await get('http://10.0.2.2:5002/api/plantings-history', headers: {
         'Authorization': 'Bearer $accessToken',
       });
 

@@ -5,6 +5,8 @@ import 'package:shimmer/shimmer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
+
 import 'package:fluttertoast/fluttertoast.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -13,6 +15,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final _fcm = FirebaseMessaging();
+
   String _plantingName = '';
   int _plantingId = 0;
   int _plantingTime = 0;
@@ -123,8 +127,42 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  void _updateInfoFromDataNotification(dynamic data) {
+    final Map<String, String> castData = Map.from(data);
+
+    setState(() {
+      _currentHumidity = int.parse(castData['currentHumidity']);
+      _currentTemperature = int.parse(castData['currentTemperature']);
+    });
+  }
+
   @override
   void initState() {
+    _fcm.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        var data = message['data'];
+        if (data['code'] == "SVG_PLANTING_STARTED") {
+          _getCurrentInfo();
+        } else if (data['code'] == "SVG_UPDATE_DATA") {
+          _updateInfoFromDataNotification(data);
+        }
+      },
+      onResume: (Map<String, dynamic> message) async {
+        var data = message['data'];
+
+        if (data['code'] == "SVG_PLANTING_STARTED") {
+          _getCurrentInfo();
+        }
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        var data = message['data'];
+
+        if (data['code'] == "SVG_PLANTING_STARTED") {
+          _getCurrentInfo();
+        }
+      },
+    );
+
     _isLoading = true;
     super.initState();
     _getCurrentInfo();
