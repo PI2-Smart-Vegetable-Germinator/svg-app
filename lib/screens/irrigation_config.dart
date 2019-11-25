@@ -13,7 +13,6 @@ class IrrigationConfig extends StatefulWidget {
 
 class _IrrigationConfigState extends State<IrrigationConfig> {
   bool irrigationStatus = false;
-  // TODO setar estados de loading nas requisições
   var _isLoading = false;
 
   @override

@@ -10,7 +10,6 @@ class IlluminationConfig extends StatefulWidget {
 
 class _IlluminationConfigState extends State<IlluminationConfig> {
   bool illuminationStatus = false;
-  // TODO setar estados de loading nas requisições
   var _isLoading = false;
 
   @override

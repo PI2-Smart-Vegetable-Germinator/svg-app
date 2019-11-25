@@ -21,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _currentTemperature = 0;
   bool _currentlyBacklit = null;
   int _hoursBacklit = 0;
-  int _sproutedSeedlings= 0;
+  int _sproutedSeedlings = 0;
   var _activePlanting = false;
   var _isLoading = false;
   var _loadPage = false;
@@ -36,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     try {
       Response response =
-          await get('http://192.168.100.177:5002/api/current-info', headers: {
+          await get('http://192.168.0.8:5002/api/current-info', headers: {
         'Authorization': 'Bearer $accessToken',
       });
 
@@ -67,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
         json.decode(prefs.get('authTokens')) as Map<String, Object>;
     final accessToken = authTokens['accessToken'];
 
-    Response response = await get('http://192.168.100.177:5002/api/get-image',
+    Response response = await get('http://192.168.0.8:5002/api/get-image',
         headers: {'Authorization': 'Bearer $accessToken'});
     final data = response.bodyBytes;
 
@@ -82,7 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     try {
       final response = await post(
-        'http://192.168.100.177:5002/api/app/start_irrigation',
+        'http://192.168.0.8:5002/api/app/start_irrigation',
         body: json.encode(payload),
         headers: {"Content-Type": "application/json"},
       );
@@ -98,10 +98,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
     try {
       final response = await post(
-        'http://192.168.100.177:5002/api/app/start_illumination',
+        'http://192.168.0.8:5002/api/app/switch_illumination',
         body: json.encode(payload),
         headers: {"Content-Type": "application/json"},
       );
+
+      await _getCurrentInfo();
     } catch (error) {
       throw error;
     }
@@ -112,21 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     try {
       final response = await post(
-        'http://192.168.100.177:5002/api/app/end_irrigation',
-        body: json.encode(payload),
-        headers: {"Content-Type": "application/json"},
-      );
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  Future<void> endIllumination() async {
-    var payload = {'plantingId': this._plantingId};
-
-    try {
-      final response = await post(
-        'http://192.168.100.177:5002/api/app/end_illumination',
+        'http://192.168.0.8:5002/api/app/end_irrigation',
         body: json.encode(payload),
         headers: {"Content-Type": "application/json"},
       );
@@ -165,43 +153,30 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Align(
                   alignment: Alignment.bottomLeft,
                   child: FloatingActionButton.extended(
-                    heroTag: 'iluminar',
-                    onPressed: () {
-                      if (_currentlyBacklit) {
-                        endIllumination();
-                        _currentlyBacklit = false;
-                        _getCurrentInfo();
+                      heroTag: 'iluminar',
+                      onPressed: () {
                         Fluttertoast.showToast(
-                            msg: "A SVG desligará a iluminação em breve!",
+                            msg: _currentlyBacklit
+                                ? "A SVG desligará a iluminação em breve!"
+                                : "A SVG acionará a iluminação em breve!",
                             toastLength: Toast.LENGTH_LONG,
                             gravity: ToastGravity.BOTTOM,
                             timeInSecForIos: 1,
                             backgroundColor: Color.fromRGBO(78, 78, 78, 1),
                             textColor: Colors.white,
                             fontSize: 18.0);
-                      } else {
                         startIllumination();
-                        _currentlyBacklit = true;
-                        _getCurrentInfo();
-                        Fluttertoast.showToast(
-                            msg: "A SVG acionará a iluminação em breve!",
-                            toastLength: Toast.LENGTH_LONG,
-                            gravity: ToastGravity.BOTTOM,
-                            timeInSecForIos: 1,
-                            backgroundColor: Color.fromRGBO(78, 78, 78, 1),
-                            textColor: Colors.white,
-                            fontSize: 18.0);
-                      }
-                    },
-                    label: Text('Iluminar',
-                        style: TextStyle(
-                            fontSize: ScreenUtil.instance.setSp(16.0))),
-                    icon: Icon(
-                      Icons.brightness_high,
-                      size: ScreenUtil.instance.setSp(30.0),
-                    ),
-                    backgroundColor: Colors.orangeAccent,
-                  ),
+                      },
+                      label: Text('Iluminar',
+                          style: TextStyle(
+                              fontSize: ScreenUtil.instance.setSp(16.0))),
+                      icon: Icon(
+                        Icons.brightness_high,
+                        size: ScreenUtil.instance.setSp(30.0),
+                      ),
+                      backgroundColor: _currentlyBacklit
+                          ? Colors.orangeAccent
+                          : Colors.grey),
                 ),
               ),
               Align(
@@ -285,7 +260,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               )
                             : Text(
-                                _sproutedSeedlings.toString() + "% das mudas germinaram",
+                                _sproutedSeedlings.toString() +
+                                    "% das mudas germinaram",
                                 style: TextStyle(
                                     fontSize: ScreenUtil.instance.setSp(19.0),
                                     color: Colors.white,
