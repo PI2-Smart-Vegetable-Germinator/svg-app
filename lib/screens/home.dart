@@ -157,8 +157,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       onPressed: () {
                         Fluttertoast.showToast(
                             msg: _currentlyBacklit
-                                ? "A SVG desligará a iluminação em breve!"
-                                : "A SVG acionará a iluminação em breve!",
+                                ? "A SVG desligará a iluminação!"
+                                : "A SVG acionará a iluminação!",
                             toastLength: Toast.LENGTH_LONG,
                             gravity: ToastGravity.BOTTOM,
                             timeInSecForIos: 1,
