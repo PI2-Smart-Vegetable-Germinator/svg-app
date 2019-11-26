@@ -22,6 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _plantingTime = 0;
   int _remainingDays = 0;
   int _currentHumidity = 0;
+  int _currentAirHumidity = 0;
   int _currentTemperature = 0;
   bool _currentlyBacklit = null;
   int _hoursBacklit = 0;
@@ -49,6 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         _plantingId = data['data']['planting_id'];
         _currentHumidity = data['data']['current_humidity'];
+        _currentAirHumidity = data['data']['current_air_humidity'];
         _currentTemperature = data['data']['current_temperature'];
         _currentlyBacklit = data['data']['currently_backlit'];
         _remainingDays = data['data']['cycle_remaining_days'];
@@ -530,19 +532,66 @@ class _HomeScreenState extends State<HomeScreen> {
                                   margin: EdgeInsets.only(
                                       top: ScreenUtil.instance.setHeight(15.0),
                                       left: ScreenUtil.instance.setWidth(12.0)),
-                                  width: ScreenUtil.instance.setWidth(220.0),
+                                  width: ScreenUtil.instance.setWidth(100.0),
                                   child: Text(
-                                    'Umidade',
+                                    'Umidade do ar',
+                                    textAlign: TextAlign.center,
                                     style: TextStyle(
                                         fontSize:
-                                            ScreenUtil.instance.setSp(23.0),
+                                            ScreenUtil.instance.setSp(21.5),
                                         fontWeight: FontWeight.bold,
                                         color: Color(0xff575757)),
                                   ),
                                 ),
                                 Container(
                                   margin: EdgeInsets.only(
-                                      top: ScreenUtil.instance.setHeight(16.0)),
+                                      top: ScreenUtil.instance.setHeight(16.0),
+                                      left: ScreenUtil.instance.setWidth(12.0)),
+                                  width: ScreenUtil.instance.setWidth(100.0),
+                                  child: _isLoading
+                                      ? Shimmer.fromColors(
+                                          baseColor: Colors.grey[500],
+                                          highlightColor: Colors.white,
+                                          child: Container(
+                                            width: double.infinity / 2,
+                                            height: ScreenUtil.instance
+                                                .setHeight(25.0),
+                                            color: Colors.white70,
+                                          ),
+                                        )
+                                      : Text(
+                                          '$_currentAirHumidity' + '%',
+                                          textAlign: TextAlign.center,
+                                          style: TextStyle(
+                                              fontSize: ScreenUtil.instance
+                                                  .setSp(35.0),
+                                              fontWeight: FontWeight.bold,
+                                              color: Color(0xff575757)),
+                                        ),
+                                ),
+                              ],
+                            ),
+                            Column(
+                              children: <Widget>[
+                                Container(
+                                  margin: EdgeInsets.only(
+                                      top: ScreenUtil.instance.setHeight(15.0),
+                                      left: ScreenUtil.instance.setWidth(12.0)),
+                                  width: ScreenUtil.instance.setWidth(120.0),
+                                  child: Text(
+                                    'Umidade do solo',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontSize: ScreenUtil.instance.setSp(21.5),
+                                      fontWeight: FontWeight.bold,
+                                      color: Color(0xff575757),
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  margin: EdgeInsets.only(
+                                      top: ScreenUtil.instance.setHeight(16.0),
+                                      left: ScreenUtil.instance.setWidth(12.0)),
                                   width: ScreenUtil.instance.setWidth(100.0),
                                   child: _isLoading
                                       ? Shimmer.fromColors(
