@@ -10,6 +10,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -188,67 +189,65 @@ class _HomeScreenState extends State<HomeScreen> {
       if (_activePlanting) {
         return Scaffold(
           backgroundColor: Colors.white,
-          floatingActionButton: Stack(
-            children: <Widget>[
-              Padding(
-                padding:
-                    EdgeInsets.only(left: ScreenUtil.instance.setWidth(31.0)),
-                child: Align(
-                  alignment: Alignment.bottomLeft,
-                  child: FloatingActionButton.extended(
-                      heroTag: 'iluminar',
-                      onPressed: () {
-                        Fluttertoast.showToast(
-                            msg: _currentlyBacklit
-                                ? "A SVG desligará a iluminação!"
-                                : "A SVG acionará a iluminação!",
-                            toastLength: Toast.LENGTH_LONG,
-                            gravity: ToastGravity.BOTTOM,
-                            timeInSecForIos: 1,
-                            backgroundColor: Color.fromRGBO(78, 78, 78, 1),
-                            textColor: Colors.white,
-                            fontSize: 18.0);
-                        startIllumination();
-                      },
-                      label: Text('Iluminar',
-                          style: TextStyle(
-                              fontSize: ScreenUtil.instance.setSp(16.0))),
-                      icon: Icon(
-                        Icons.brightness_high,
-                        size: ScreenUtil.instance.setSp(30.0),
-                      ),
-                      backgroundColor: _currentlyBacklit
-                          ? Colors.orangeAccent
-                          : Colors.grey),
-                ),
-              ),
-              Align(
-                alignment: Alignment.bottomRight,
-                child: FloatingActionButton.extended(
-                  heroTag: 'irrigar',
-                  onPressed: () {
-                    startIrrigation();
+          floatingActionButton: SpeedDial(
+              animatedIcon: AnimatedIcons.menu_close,
+              animatedIconTheme: IconThemeData(size: 25),
+              backgroundColor: Color.fromRGBO(144, 201, 82, 1),
+              visible: true,
+              curve: Curves.bounceIn,
+              children: [
+                SpeedDialChild(
+                  child: Icon(
+                    _currentlyBacklit
+                        ? Icons.lightbulb_outline
+                        : Icons.wb_incandescent,
+                    size: ScreenUtil.instance.setSp(32.0),
+                  ),
+                  backgroundColor:
+                      _currentlyBacklit ? Colors.orangeAccent : Colors.grey,
+                  label: _currentlyBacklit ? 'Desligar iluminação' : 'Iluminar',
+                  labelStyle: TextStyle(
+                      fontSize: ScreenUtil.instance.setSp(20.0),
+                      color: Colors.white),
+                  labelBackgroundColor:
+                      _currentlyBacklit ? Colors.orangeAccent : Colors.grey,
+                  onTap: () {
                     Fluttertoast.showToast(
-                        msg: "A SVG iniciará a irrigação em breve!",
+                        msg: _currentlyBacklit
+                            ? "A SVG desligará a iluminação!"
+                            : "A SVG acionará a iluminação!",
                         toastLength: Toast.LENGTH_LONG,
                         gravity: ToastGravity.BOTTOM,
                         timeInSecForIos: 1,
                         backgroundColor: Color.fromRGBO(78, 78, 78, 1),
                         textColor: Colors.white,
                         fontSize: 18.0);
+                    startIllumination();
                   },
-                  label: Text('Irrigar',
-                      style:
-                          TextStyle(fontSize: ScreenUtil.instance.setSp(16.0))),
-                  icon: Icon(
-                    Icons.opacity,
-                    size: ScreenUtil.instance.setSp(30.0),
-                  ),
-                  backgroundColor: Colors.blueAccent,
                 ),
-              ),
-            ],
-          ),
+                SpeedDialChild(
+                    child: Icon(
+                      Icons.opacity,
+                      size: ScreenUtil.instance.setSp(32.0),
+                    ),
+                    backgroundColor: Colors.blueAccent,
+                    label: 'Irrigar',
+                    labelStyle: TextStyle(
+                        fontSize: ScreenUtil.instance.setSp(20.0),
+                        color: Colors.white),
+                    labelBackgroundColor: Colors.blueAccent,
+                    onTap: () {
+                      Fluttertoast.showToast(
+                          msg: "A SVG iniciará a irrigação!",
+                          toastLength: Toast.LENGTH_LONG,
+                          gravity: ToastGravity.BOTTOM,
+                          timeInSecForIos: 1,
+                          backgroundColor: Color.fromRGBO(78, 78, 78, 1),
+                          textColor: Colors.white,
+                          fontSize: 18.0);
+                      startIrrigation();
+                    }),
+              ]),
           body: Stack(
             children: <Widget>[
               ClipRRect(
