@@ -40,10 +40,8 @@ class PlantingsGrid extends StatelessWidget {
           child: GridTile(
             child: GestureDetector(
               onTap: () {
-                Navigator.of(context).pushNamed(
-                  ImageExpand.routeName,
-                  arguments: plantings.items[i].id
-                );
+                Navigator.of(context).pushNamed(ImageExpand.routeName,
+                    arguments: plantings.items[i].id);
               },
               child: Container(
                   padding: EdgeInsets.all(ScreenUtil.instance.setWidth(10.0)),
@@ -63,18 +61,24 @@ class PlantingsGrid extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        Flexible(
-                          child: Container(
-                            height: 90,
-                            width: 90,
-                            child: CircleAvatar(
-                              radius: MediaQuery.of(context).size.width / 8,
-                              backgroundColor: Colors.transparent,
-                              backgroundImage:
-                                  NetworkImage(plantings.items[i].pictureUrl),
-                            ),
-                          ),
-                        ),
+                        plantings.items[i].pictureUrl.isEmpty
+                            ? Flexible(
+                                child: Icon(Icons.info,
+                                    color: Color.fromRGBO(166, 166, 166, 1), size: 75.0),
+                              )
+                            : Flexible(
+                                child: Container(
+                                  height: 90,
+                                  width: 90,
+                                  child: CircleAvatar(
+                                    radius:
+                                        MediaQuery.of(context).size.width / 8,
+                                    backgroundColor: Colors.transparent,
+                                    backgroundImage: NetworkImage(
+                                        plantings.items[i].pictureUrl),
+                                  ),
+                                ),
+                              ),
                       ],
                     ),
                     Column(

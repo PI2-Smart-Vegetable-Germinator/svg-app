@@ -76,6 +76,7 @@ class Auth with ChangeNotifier {
       }
 
       final responseJson = json.decode(response.body);
+      _machineId = responseJson['machineId'];
       await _setAuthTokens(responseJson['authTokens']);
     } catch (error) {
       throw error;
