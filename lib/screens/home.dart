@@ -9,6 +9,8 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
 
+import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
+
 class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -185,6 +187,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (!_isLoading && _loadPage) {
       if (_activePlanting) {
         return Scaffold(
+          backgroundColor: Colors.white,
           floatingActionButton: Stack(
             children: <Widget>[
               Padding(
@@ -343,111 +346,44 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               Container(
                 margin:
-                    EdgeInsets.only(top: ScreenUtil.instance.setHeight(220.0)),
-                child: GridView.count(
-                  primary: false,
-                  padding: EdgeInsets.all(ScreenUtil.instance.setWidth(20.0)),
-                  mainAxisSpacing: ScreenUtil.instance.setWidth(15.0),
-                  crossAxisCount: 1,
-                  childAspectRatio: 2.65,
-                  children: <Widget>[
-                    Container(
-                      padding:
-                          EdgeInsets.all(ScreenUtil.instance.setHeight(10.0)),
-                      decoration: new BoxDecoration(
-                          color: Color(0xffF1F2F2),
-                          borderRadius:
-                              new BorderRadius.all(const Radius.circular(20.0)),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black38,
-                              blurRadius: 4.5,
-                              offset: Offset(5.0, 5.0),
-                            )
-                          ]),
-                      child: Row(
-                        children: <Widget>[
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              Flexible(
-                                child: Icon(Icons.insert_chart,
-                                    color: Color(0xffFF4242), size: 90.0),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            children: <Widget>[
-                              Container(
-                                margin: EdgeInsets.only(
-                                    top: ScreenUtil.instance.setHeight(15.0)),
-                                width: ScreenUtil.instance.setWidth(220.0),
-                                child: Text(
-                                  'Temperatura',
-                                  style: TextStyle(
-                                      fontSize: ScreenUtil.instance.setSp(23.0),
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0xff575757)),
-                                ),
-                              ),
-                              Container(
-                                margin: EdgeInsets.only(
-                                    top: ScreenUtil.instance.setHeight(16.0)),
-                                width: ScreenUtil.instance.setWidth(100.0),
-                                child: _isLoading
-                                    ? Shimmer.fromColors(
-                                        baseColor: Colors.grey[500],
-                                        highlightColor: Colors.white,
-                                        child: Container(
-                                          width: double.infinity / 2,
-                                          height: ScreenUtil.instance
-                                              .setHeight(25.0),
-                                          color: Colors.white70,
-                                        ),
-                                      )
-                                    : Text(
-                                        '$_currentTemperature\ºc',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                            fontSize:
-                                                ScreenUtil.instance.setSp(35.0),
-                                            fontWeight: FontWeight.bold,
-                                            color: Color(0xff575757)),
-                                      ),
+                    EdgeInsets.only(top: ScreenUtil.instance.setHeight(215.0)),
+                child: LiquidPullToRefresh(
+                  color: Colors.white,
+                  backgroundColor: Color.fromRGBO(144, 201, 82, 1),
+                  showChildOpacityTransition: true,
+                  springAnimationDurationInMilliseconds: 850,
+                  height: ScreenUtil.instance.setHeight(85.0),
+                  onRefresh: _getCurrentInfo,
+                  child: GridView.count(
+                    primary: false,
+                    padding: EdgeInsets.all(ScreenUtil.instance.setWidth(20.0)),
+                    mainAxisSpacing: ScreenUtil.instance.setWidth(15.0),
+                    crossAxisCount: 1,
+                    childAspectRatio: 2.65,
+                    children: <Widget>[
+                      Container(
+                        padding:
+                            EdgeInsets.all(ScreenUtil.instance.setHeight(10.0)),
+                        decoration: new BoxDecoration(
+                            color: Color(0xffF1F2F2),
+                            borderRadius: new BorderRadius.all(
+                                const Radius.circular(20.0)),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black38,
+                                blurRadius: 4.5,
+                                offset: Offset(5.0, 5.0),
                               )
-                            ],
-                          )
-                        ],
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        print('configurar iluminação');
-                        Navigator.of(context).pushNamed('/illumination-config');
-                      },
-                      child: Container(
-                          padding: EdgeInsets.all(
-                              ScreenUtil.instance.setHeight(10.0)),
-                          decoration: new BoxDecoration(
-                              color: Color(0xffF1F2F2),
-                              borderRadius: new BorderRadius.all(
-                                  const Radius.circular(15.0)),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black38,
-                                  blurRadius: 4.5,
-                                  offset: Offset(5.0, 5.0),
-                                )
-                              ]),
-                          child: Row(children: <Widget>[
+                            ]),
+                        child: Row(
+                          children: <Widget>[
                             Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
                                 Flexible(
-                                  child: Icon(Icons.wb_sunny,
-                                      color: Color(0xffFFC107), size: 90.0),
+                                  child: Icon(Icons.insert_chart,
+                                      color: Color(0xffFF4242), size: 90.0),
                                 ),
                               ],
                             ),
@@ -458,10 +394,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                       top: ScreenUtil.instance.setHeight(15.0)),
                                   width: ScreenUtil.instance.setWidth(220.0),
                                   child: Text(
-                                    'Tempo de iluminação',
+                                    'Temperatura',
                                     style: TextStyle(
                                         fontSize:
-                                            ScreenUtil.instance.setSp(21.5),
+                                            ScreenUtil.instance.setSp(23.0),
                                         fontWeight: FontWeight.bold,
                                         color: Color(0xff575757)),
                                   ),
@@ -482,7 +418,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           ),
                                         )
                                       : Text(
-                                          '$_hoursBacklit' + 'h',
+                                          '$_currentTemperature\ºc',
                                           textAlign: TextAlign.center,
                                           style: TextStyle(
                                               fontSize: ScreenUtil.instance
@@ -493,134 +429,222 @@ class _HomeScreenState extends State<HomeScreen> {
                                 )
                               ],
                             )
-                          ])),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        print('configurar irrigacao');
-                        Navigator.of(context).pushNamed('/irrigation-config');
-                      },
-                      child: Container(
-                        padding:
-                            EdgeInsets.all(ScreenUtil.instance.setHeight(10.0)),
-                        decoration: new BoxDecoration(
-                            color: Color(0xffF1F2F2),
-                            borderRadius: new BorderRadius.all(
-                                const Radius.circular(15.0)),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black38,
-                                blurRadius: 4.5,
-                                offset: Offset(5.0, 5.0),
-                              )
-                            ]),
-                        child: Row(
-                          children: <Widget>[
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Flexible(
-                                  child: Icon(Icons.wb_cloudy,
-                                      color: Color(0xff3499C1), size: 80.0),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              children: <Widget>[
-                                Container(
-                                  margin: EdgeInsets.only(
-                                      top: ScreenUtil.instance.setHeight(15.0),
-                                      left: ScreenUtil.instance.setWidth(12.0)),
-                                  width: ScreenUtil.instance.setWidth(100.0),
-                                  child: Text(
-                                    'Umidade do ar',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        fontSize:
-                                            ScreenUtil.instance.setSp(21.5),
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xff575757)),
-                                  ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(
-                                      top: ScreenUtil.instance.setHeight(16.0),
-                                      left: ScreenUtil.instance.setWidth(12.0)),
-                                  width: ScreenUtil.instance.setWidth(100.0),
-                                  child: _isLoading
-                                      ? Shimmer.fromColors(
-                                          baseColor: Colors.grey[500],
-                                          highlightColor: Colors.white,
-                                          child: Container(
-                                            width: double.infinity / 2,
-                                            height: ScreenUtil.instance
-                                                .setHeight(25.0),
-                                            color: Colors.white70,
-                                          ),
-                                        )
-                                      : Text(
-                                          '$_currentAirHumidity' + '%',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontSize: ScreenUtil.instance
-                                                  .setSp(35.0),
-                                              fontWeight: FontWeight.bold,
-                                              color: Color(0xff575757)),
-                                        ),
-                                ),
-                              ],
-                            ),
-                            Column(
-                              children: <Widget>[
-                                Container(
-                                  margin: EdgeInsets.only(
-                                      top: ScreenUtil.instance.setHeight(15.0),
-                                      left: ScreenUtil.instance.setWidth(12.0)),
-                                  width: ScreenUtil.instance.setWidth(120.0),
-                                  child: Text(
-                                    'Umidade do solo',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      fontSize: ScreenUtil.instance.setSp(21.5),
-                                      fontWeight: FontWeight.bold,
-                                      color: Color(0xff575757),
-                                    ),
-                                  ),
-                                ),
-                                Container(
-                                  margin: EdgeInsets.only(
-                                      top: ScreenUtil.instance.setHeight(16.0),
-                                      left: ScreenUtil.instance.setWidth(12.0)),
-                                  width: ScreenUtil.instance.setWidth(100.0),
-                                  child: _isLoading
-                                      ? Shimmer.fromColors(
-                                          baseColor: Colors.grey[500],
-                                          highlightColor: Colors.white,
-                                          child: Container(
-                                            width: double.infinity / 2,
-                                            height: ScreenUtil.instance
-                                                .setHeight(25.0),
-                                            color: Colors.white70,
-                                          ),
-                                        )
-                                      : Text(
-                                          '$_currentHumidity' + '%',
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                              fontSize: ScreenUtil.instance
-                                                  .setSp(35.0),
-                                              fontWeight: FontWeight.bold,
-                                              color: Color(0xff575757)),
-                                        ),
-                                ),
-                              ],
-                            ),
                           ],
                         ),
                       ),
-                    ),
-                  ],
+                      GestureDetector(
+                        onTap: () {
+                          print('configurar iluminação');
+                          Navigator.of(context)
+                              .pushNamed('/illumination-config');
+                        },
+                        child: Container(
+                            padding: EdgeInsets.all(
+                                ScreenUtil.instance.setHeight(10.0)),
+                            decoration: new BoxDecoration(
+                                color: Color(0xffF1F2F2),
+                                borderRadius: new BorderRadius.all(
+                                    const Radius.circular(15.0)),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black38,
+                                    blurRadius: 4.5,
+                                    offset: Offset(5.0, 5.0),
+                                  )
+                                ]),
+                            child: Row(children: <Widget>[
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  Flexible(
+                                    child: Icon(Icons.wb_sunny,
+                                        color: Color(0xffFFC107), size: 90.0),
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                children: <Widget>[
+                                  Container(
+                                    margin: EdgeInsets.only(
+                                        top: ScreenUtil.instance
+                                            .setHeight(15.0)),
+                                    width: ScreenUtil.instance.setWidth(220.0),
+                                    child: Text(
+                                      'Tempo de iluminação',
+                                      style: TextStyle(
+                                          fontSize:
+                                              ScreenUtil.instance.setSp(21.5),
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xff575757)),
+                                    ),
+                                  ),
+                                  Container(
+                                    margin: EdgeInsets.only(
+                                        top: ScreenUtil.instance
+                                            .setHeight(16.0)),
+                                    width: ScreenUtil.instance.setWidth(100.0),
+                                    child: _isLoading
+                                        ? Shimmer.fromColors(
+                                            baseColor: Colors.grey[500],
+                                            highlightColor: Colors.white,
+                                            child: Container(
+                                              width: double.infinity / 2,
+                                              height: ScreenUtil.instance
+                                                  .setHeight(25.0),
+                                              color: Colors.white70,
+                                            ),
+                                          )
+                                        : Text(
+                                            '$_hoursBacklit' + 'h',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                fontSize: ScreenUtil.instance
+                                                    .setSp(35.0),
+                                                fontWeight: FontWeight.bold,
+                                                color: Color(0xff575757)),
+                                          ),
+                                  )
+                                ],
+                              )
+                            ])),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          print('configurar irrigacao');
+                          Navigator.of(context).pushNamed('/irrigation-config');
+                        },
+                        child: Container(
+                          padding: EdgeInsets.all(
+                              ScreenUtil.instance.setHeight(10.0)),
+                          decoration: new BoxDecoration(
+                              color: Color(0xffF1F2F2),
+                              borderRadius: new BorderRadius.all(
+                                  const Radius.circular(15.0)),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black38,
+                                  blurRadius: 4.5,
+                                  offset: Offset(5.0, 5.0),
+                                )
+                              ]),
+                          child: Row(
+                            children: <Widget>[
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: <Widget>[
+                                  Flexible(
+                                    child: Icon(Icons.wb_cloudy,
+                                        color: Color(0xff3499C1), size: 80.0),
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                children: <Widget>[
+                                  Container(
+                                    margin: EdgeInsets.only(
+                                        top:
+                                            ScreenUtil.instance.setHeight(15.0),
+                                        left:
+                                            ScreenUtil.instance.setWidth(12.0)),
+                                    width: ScreenUtil.instance.setWidth(100.0),
+                                    child: Text(
+                                      'Umidade do ar',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize:
+                                              ScreenUtil.instance.setSp(21.5),
+                                          fontWeight: FontWeight.bold,
+                                          color: Color(0xff575757)),
+                                    ),
+                                  ),
+                                  Container(
+                                    margin: EdgeInsets.only(
+                                        top:
+                                            ScreenUtil.instance.setHeight(16.0),
+                                        left:
+                                            ScreenUtil.instance.setWidth(12.0)),
+                                    width: ScreenUtil.instance.setWidth(100.0),
+                                    child: _isLoading
+                                        ? Shimmer.fromColors(
+                                            baseColor: Colors.grey[500],
+                                            highlightColor: Colors.white,
+                                            child: Container(
+                                              width: double.infinity / 2,
+                                              height: ScreenUtil.instance
+                                                  .setHeight(25.0),
+                                              color: Colors.white70,
+                                            ),
+                                          )
+                                        : Text(
+                                            '$_currentAirHumidity' + '%',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                fontSize: ScreenUtil.instance
+                                                    .setSp(35.0),
+                                                fontWeight: FontWeight.bold,
+                                                color: Color(0xff575757)),
+                                          ),
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                children: <Widget>[
+                                  Container(
+                                    margin: EdgeInsets.only(
+                                        top:
+                                            ScreenUtil.instance.setHeight(15.0),
+                                        left:
+                                            ScreenUtil.instance.setWidth(12.0)),
+                                    width: ScreenUtil.instance.setWidth(120.0),
+                                    child: Text(
+                                      'Umidade do solo',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        fontSize:
+                                            ScreenUtil.instance.setSp(21.5),
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xff575757),
+                                      ),
+                                    ),
+                                  ),
+                                  Container(
+                                    margin: EdgeInsets.only(
+                                        top:
+                                            ScreenUtil.instance.setHeight(16.0),
+                                        left:
+                                            ScreenUtil.instance.setWidth(12.0)),
+                                    width: ScreenUtil.instance.setWidth(100.0),
+                                    child: _isLoading
+                                        ? Shimmer.fromColors(
+                                            baseColor: Colors.grey[500],
+                                            highlightColor: Colors.white,
+                                            child: Container(
+                                              width: double.infinity / 2,
+                                              height: ScreenUtil.instance
+                                                  .setHeight(25.0),
+                                              color: Colors.white70,
+                                            ),
+                                          )
+                                        : Text(
+                                            '$_currentHumidity' + '%',
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                fontSize: ScreenUtil.instance
+                                                    .setSp(35.0),
+                                                fontWeight: FontWeight.bold,
+                                                color: Color(0xff575757)),
+                                          ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               Positioned(
