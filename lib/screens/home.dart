@@ -90,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
     var payload = {'plantingId': this._plantingId};
 
     try {
-      final response = await post(
+      await post(
         'http://192.168.0.8:5002/api/app/start_irrigation',
         body: json.encode(payload),
         headers: {"Content-Type": "application/json"},
@@ -106,7 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
     var payload = {'plantingId': this._plantingId};
 
     try {
-      final response = await post(
+      await post(
         'http://192.168.0.8:5002/api/app/switch_illumination',
         body: json.encode(payload),
         headers: {"Content-Type": "application/json"},
@@ -122,7 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
     var payload = {'plantingId': this._plantingId};
 
     try {
-      final response = await post(
+      await post(
         'http://192.168.0.8:5002/api/app/end_irrigation',
         body: json.encode(payload),
         headers: {"Content-Type": "application/json"},
@@ -194,7 +194,10 @@ class _HomeScreenState extends State<HomeScreen> {
               animatedIconTheme: IconThemeData(size: 25),
               backgroundColor: Color.fromRGBO(144, 201, 82, 1),
               visible: true,
-              curve: Curves.bounceIn,
+              heroTag: 'speed-dial-hero-tag',
+              curve: Curves.easeIn,
+              elevation: 8.0,
+              overlayOpacity: 0.65,
               children: [
                 SpeedDialChild(
                   child: Icon(
@@ -709,18 +712,56 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             Container(
               margin: EdgeInsets.only(
-                  top: ScreenUtil.instance.setHeight(120.0),
+                  top: ScreenUtil.instance.setHeight(100.0),
                   left: ScreenUtil.instance.setWidth(10.0),
                   right: ScreenUtil.instance.setWidth(10.0)),
-              child: Text(
-                'Inicie um plantio, e o app exibirá os dados de monitoramento!',
-                style: TextStyle(
-                    fontSize: ScreenUtil.instance.setSp(28.0),
-                    fontWeight: FontWeight.bold,
-                    color: Color(0xff575757),
-                    letterSpacing: 1.5,
-                    height: 1.5),
-                textAlign: TextAlign.center,
+              child: Column(
+                children: <Widget>[
+                  Text(
+                    'Inicie um plantio, e o app exibirá os dados de monitoramento!',
+                    style: TextStyle(
+                        fontSize: ScreenUtil.instance.setSp(28.0),
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xff575757),
+                        letterSpacing: 1.5,
+                        height: 1.5),
+                    textAlign: TextAlign.center,
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(
+                      top: ScreenUtil.instance.setHeight(95.0),
+                    ),
+                    child: Ink(
+                      decoration: ShapeDecoration(
+                        color: Color.fromRGBO(116, 173, 31, 1),
+                        shape: CircleBorder(),
+                      ),
+                      child: IconButton(
+                        icon: Icon(Icons.refresh),
+                        color: Colors.white,
+                        onPressed: () {
+                          _getCurrentInfo();
+                        },
+                      ),
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(
+                        top: ScreenUtil.instance.setHeight(15.0),
+                        left: ScreenUtil.instance.setWidth(15.0),
+                        right: ScreenUtil.instance.setWidth(15.0)),
+                    child: Text(
+                      'Atualizar com SVG',
+                      style: TextStyle(
+                          fontSize: ScreenUtil.instance.setSp(15.0),
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xff575757),
+                          letterSpacing: 1.2,
+                          height: 1.3),
+                      textAlign: TextAlign.justify,
+                    ),
+                  ),
+                ],
               ),
             )
           ],
