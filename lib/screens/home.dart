@@ -17,6 +17,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final _fcm = FirebaseMessaging();
 
+  bool _svgOnline;
   String _plantingName = '';
   int _plantingId = 0;
   int _plantingTime = 0;
@@ -39,9 +40,22 @@ class _HomeScreenState extends State<HomeScreen> {
         json.decode(prefs.get('authTokens')) as Map<String, Object>;
     final accessToken = authTokens['accessToken'];
 
+    Response pingResponse = await get('http://10.0.2.2:5002/api/ping_rasp');
+    if (pingResponse.statusCode == 503) {
+      setState(() {
+        _svgOnline = false;
+        _isLoading = false;
+      });
+      return;
+    } else {
+      setState(() {
+        _svgOnline = true;
+      });
+    }
+
     try {
       Response response =
-          await get('http://192.168.0.8:5002/api/current-info', headers: {
+          await get('http://10.0.2.2:5002/api/current-info', headers: {
         'Authorization': 'Bearer $accessToken',
       });
 
@@ -73,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
         json.decode(prefs.get('authTokens')) as Map<String, Object>;
     final accessToken = authTokens['accessToken'];
 
-    Response response = await get('http://192.168.0.8:5002/api/get-image',
+    Response response = await get('http://10.0.2.2:5002/api/get-image',
         headers: {'Authorization': 'Bearer $accessToken'});
     final data = response.bodyBytes;
 
@@ -88,7 +102,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     try {
       final response = await post(
-        'http://192.168.0.8:5002/api/app/start_irrigation',
+        'http://10.0.2.2:5002/api/app/start_irrigation',
         body: json.encode(payload),
         headers: {"Content-Type": "application/json"},
       );
@@ -104,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     try {
       final response = await post(
-        'http://192.168.0.8:5002/api/app/switch_illumination',
+        'http://10.0.2.2:5002/api/app/switch_illumination',
         body: json.encode(payload),
         headers: {"Content-Type": "application/json"},
       );
@@ -120,7 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     try {
       final response = await post(
-        'http://192.168.0.8:5002/api/app/end_irrigation',
+        'http://10.0.2.2:5002/api/app/end_irrigation',
         body: json.encode(payload),
         headers: {"Content-Type": "application/json"},
       );
@@ -183,7 +197,82 @@ class _HomeScreenState extends State<HomeScreen> {
     )..init(context);
 
     if (!_isLoading && _loadPage) {
-      if (_activePlanting) {
+      if (!_svgOnline) {
+        return Scaffold(
+            body: new Column(
+          children: <Widget>[
+            ClipRRect(
+              borderRadius: new BorderRadius.only(
+                  bottomLeft: const Radius.circular(70.0)),
+              child: Container(
+                width: double.infinity,
+                height: ScreenUtil.instance.setHeight(300.0),
+                margin: EdgeInsets.all(0),
+                color: Color.fromRGBO(144, 201, 82, 1),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.only(
+                          top: ScreenUtil.instance.setHeight(55.0)),
+                      child: Icon(Icons.new_releases,
+                          color: Colors.white, size: 70.0),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(
+                          top: ScreenUtil.instance.setHeight(50.0)),
+                      child: Text(
+                        "SVG sem Internet",
+                        style: TextStyle(
+                            fontSize: ScreenUtil.instance.setSp(35),
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500),
+                        textAlign: TextAlign.left,
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            Container(
+              margin: EdgeInsets.only(
+                  top: ScreenUtil.instance.setHeight(120.0),
+                  left: ScreenUtil.instance.setWidth(10.0),
+                  right: ScreenUtil.instance.setWidth(10.0)),
+              child: Column(
+                children: <Widget>[
+                  Text(
+                    'Por favor, conecte a SVG à internet para usar o aplicativo.',
+                    style: TextStyle(
+                        fontSize: ScreenUtil.instance.setSp(28.0),
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xff575757),
+                        letterSpacing: 1.5,
+                        height: 1.5),
+                    textAlign: TextAlign.center,
+                  ),
+                  SizedBox(
+                    height: 10.0,
+                  ),
+                  RaisedButton(
+                    onPressed: () {
+                      _getCurrentInfo();
+                    },
+                    child: Text(
+                      'Tentar Novamente',
+                      style: TextStyle(fontSize: 18.0),
+                    ),
+                    padding: EdgeInsets.all(15.0),
+                    color: Color.fromRGBO(144, 201, 82, 1),
+                    textColor: Colors.white,
+                  )
+                ],
+              ),
+            )
+          ],
+        ));
+      } else if (_activePlanting) {
         return Scaffold(
           floatingActionButton: Stack(
             children: <Widget>[
