@@ -547,7 +547,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Container(
                                     margin: EdgeInsets.only(
                                         top:
-                                            ScreenUtil.instance.setHeight(15.0),
+                                            ScreenUtil.instance.setHeight(5.0),
                                         left:
                                             ScreenUtil.instance.setWidth(12.0)),
                                     width: ScreenUtil.instance.setWidth(100.0),
@@ -596,7 +596,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Container(
                                     margin: EdgeInsets.only(
                                         top:
-                                            ScreenUtil.instance.setHeight(15.0),
+                                            ScreenUtil.instance.setHeight(5.0),
                                         left:
                                             ScreenUtil.instance.setWidth(12.0)),
                                     width: ScreenUtil.instance.setWidth(120.0),
