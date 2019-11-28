@@ -12,6 +12,8 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:liquid_pull_to_refresh/liquid_pull_to_refresh.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 
+import 'package:svg_app/widgets/dialog.dart';
+
 class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -44,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     try {
       Response response =
-          await get('http://192.168.0.8:5002/api/current-info', headers: {
+          await get('http://10.0.2.2:5002/api/current-info', headers: {
         'Authorization': 'Bearer $accessToken',
       });
 
@@ -76,7 +78,7 @@ class _HomeScreenState extends State<HomeScreen> {
         json.decode(prefs.get('authTokens')) as Map<String, Object>;
     final accessToken = authTokens['accessToken'];
 
-    Response response = await get('http://192.168.0.8:5002/api/get-image',
+    Response response = await get('http://10.0.2.2:5002/api/get-image',
         headers: {'Authorization': 'Bearer $accessToken'});
     final data = response.bodyBytes;
 
@@ -91,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     try {
       await post(
-        'http://192.168.0.8:5002/api/app/start_irrigation',
+        'http://10.0.2.2:5002/api/app/start_irrigation',
         body: json.encode(payload),
         headers: {"Content-Type": "application/json"},
       );
@@ -107,7 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     try {
       await post(
-        'http://192.168.0.8:5002/api/app/switch_illumination',
+        'http://10.0.2.2:5002/api/app/switch_illumination',
         body: json.encode(payload),
         headers: {"Content-Type": "application/json"},
       );
@@ -123,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     try {
       await post(
-        'http://192.168.0.8:5002/api/app/end_irrigation',
+        'http://10.0.2.2:5002/api/app/end_irrigation',
         body: json.encode(payload),
         headers: {"Content-Type": "application/json"},
       );
@@ -146,10 +148,14 @@ class _HomeScreenState extends State<HomeScreen> {
     _fcm.configure(
       onMessage: (Map<String, dynamic> message) async {
         var data = message['data'];
+        var notification = message['notification'];
         if (data['code'] == "SVG_PLANTING_STARTED") {
           _getCurrentInfo();
         } else if (data['code'] == "SVG_UPDATE_DATA") {
           _updateInfoFromDataNotification(data);
+        }
+        else if (data['code'] == "SVG_IRRIGATION_SUCCESS") {
+          StatusDialog.show(notification['title'], notification['body'], context);
         }
       },
       onResume: (Map<String, dynamic> message) async {
@@ -249,7 +255,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           textColor: Colors.white,
                           fontSize: 18.0);
                       startIrrigation();
-                    }),
+                    },
+                  ),
               ]),
           body: Stack(
             children: <Widget>[
@@ -552,19 +559,35 @@ class _HomeScreenState extends State<HomeScreen> {
                                             ScreenUtil.instance.setWidth(12.0)),
                                     width: ScreenUtil.instance.setWidth(100.0),
                                     child: Text(
-                                      'Umidade do ar',
+                                      'Umidade',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
-                                          fontSize:
-                                              ScreenUtil.instance.setSp(21.5),
-                                          fontWeight: FontWeight.bold,
-                                          color: Color(0xff575757)),
+                                        fontSize:
+                                            ScreenUtil.instance.setSp(21.5),
+                                        fontWeight: FontWeight.bold,
+                                        color: Color(0xff575757)),
                                     ),
                                   ),
                                   Container(
                                     margin: EdgeInsets.only(
                                         top:
-                                            ScreenUtil.instance.setHeight(16.0),
+                                            ScreenUtil.instance.setHeight(5.0),
+                                        left:
+                                            ScreenUtil.instance.setWidth(15.0)),
+                                    width: ScreenUtil.instance.setWidth(30.0),
+                                    child: Text(
+                                      'Ar',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          fontSize: ScreenUtil.instance
+                                              .setSp(17.0),
+                                          color: Color(0xff575757)),
+                                      ),
+                                  ),
+                                  Container(
+                                    margin: EdgeInsets.only(
+                                        top:
+                                            ScreenUtil.instance.setHeight(6.0),
                                         left:
                                             ScreenUtil.instance.setWidth(12.0)),
                                     width: ScreenUtil.instance.setWidth(100.0),
@@ -596,27 +619,25 @@ class _HomeScreenState extends State<HomeScreen> {
                                   Container(
                                     margin: EdgeInsets.only(
                                         top:
-                                            ScreenUtil.instance.setHeight(5.0),
+                                            ScreenUtil.instance.setHeight(37.0),
                                         left:
-                                            ScreenUtil.instance.setWidth(12.0)),
-                                    width: ScreenUtil.instance.setWidth(120.0),
+                                            ScreenUtil.instance.setWidth(15.0)),
+                                    width: ScreenUtil.instance.setWidth(40.0),
                                     child: Text(
-                                      'Umidade do solo',
+                                      'Solo',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
-                                        fontSize:
-                                            ScreenUtil.instance.setSp(21.5),
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xff575757),
+                                          fontSize: ScreenUtil.instance
+                                              .setSp(17.0),
+                                          color: Color(0xff575757)),
                                       ),
-                                    ),
                                   ),
                                   Container(
                                     margin: EdgeInsets.only(
                                         top:
-                                            ScreenUtil.instance.setHeight(16.0),
+                                            ScreenUtil.instance.setHeight(6.0),
                                         left:
-                                            ScreenUtil.instance.setWidth(12.0)),
+                                            ScreenUtil.instance.setWidth(20.0)),
                                     width: ScreenUtil.instance.setWidth(100.0),
                                     child: _isLoading
                                         ? Shimmer.fromColors(
