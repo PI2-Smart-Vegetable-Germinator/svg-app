@@ -29,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
   int _currentAirHumidity = 0;
   int _currentTemperature = 0;
   bool _currentlyBacklit = null;
-  int _hoursBacklit = 0;
+  String _hoursBacklit = '';
   int _sproutedSeedlings = 0;
   var _activePlanting = false;
   var _isLoading = false;
@@ -43,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
         json.decode(prefs.get('authTokens')) as Map<String, Object>;
     final accessToken = authTokens['accessToken'];
 
-    Response pingResponse = await get('http://10.0.2.2:5002/api/ping_rasp');
+    Response pingResponse = await get('http://192.168.0.8:5002/api/ping_rasp');
     if (pingResponse.statusCode == 503) {
       setState(() {
         _svgOnline = false;
@@ -58,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     try {
       Response response =
-          await get('http://10.0.2.2:5002/api/current-info', headers: {
+          await get('http://192.168.0.8:5002/api/current-info', headers: {
         'Authorization': 'Bearer $accessToken',
       });
 
@@ -90,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
         json.decode(prefs.get('authTokens')) as Map<String, Object>;
     final accessToken = authTokens['accessToken'];
 
-    Response response = await get('http://10.0.2.2:5002/api/get-image',
+    Response response = await get('http://192.168.0.8:5002/api/get-image',
         headers: {'Authorization': 'Bearer $accessToken'});
     final data = response.bodyBytes;
 
@@ -110,7 +110,6 @@ class _HomeScreenState extends State<HomeScreen> {
         headers: {"Content-Type": "application/json"},
       );
 
-      await endIrrigation();
     } catch (error) {
       throw error;
     }
@@ -127,20 +126,6 @@ class _HomeScreenState extends State<HomeScreen> {
       );
 
       await _getCurrentInfo();
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  Future<void> endIrrigation() async {
-    var payload = {'plantingId': this._plantingId};
-
-    try {
-      await post(
-        'http://192.168.0.8:5002/api/app/end_irrigation',
-        body: json.encode(payload),
-        headers: {"Content-Type": "application/json"},
-      );
     } catch (error) {
       throw error;
     }
@@ -587,11 +572,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                             ),
                                           )
                                         : Text(
-                                            '$_hoursBacklit' + 'h',
+                                            '$_hoursBacklit',
                                             textAlign: TextAlign.center,
                                             style: TextStyle(
                                                 fontSize: ScreenUtil.instance
-                                                    .setSp(35.0),
+                                                    .setSp(30.0),
                                                 fontWeight: FontWeight.bold,
                                                 color: Color(0xff575757)),
                                           ),
