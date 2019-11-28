@@ -511,8 +511,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       GestureDetector(
                         onTap: () {
                           print('configurar iluminação');
-                          Navigator.of(context)
-                              .pushNamed('/illumination-config');
                         },
                         child: Container(
                             padding: EdgeInsets.all(

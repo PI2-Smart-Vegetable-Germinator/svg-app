@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+import 'dart:convert';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:shared_preferences/shared_preferences.dart';
 import './loading.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,10 +20,52 @@ class _IrrigationConfigState extends State<IrrigationConfig> {
   bool irrigationStatus = false;
   var _isLoading = false;
 
+  Future<void> _getSmartIrrigationStatus() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final authTokens =
+        json.decode(prefs.get('authTokens')) as Map<String, Object>;
+    final accessToken = authTokens['accessToken'];
+
+    try {
+      Response response = await get(
+        'http://192.168.0.8:5002/api/app/get_smart_irrigation_status',
+        headers: {'Authorization': 'Bearer $accessToken'},
+      );
+
+      final data = json.decode(response.body);
+
+      setState(() {
+        irrigationStatus = data['smart_irrigation_status'];
+        _isLoading = false;
+      });
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  Future<void> _setSmartIrrigation() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final authTokens =
+        json.decode(prefs.get('authTokens')) as Map<String, Object>;
+    final accessToken = authTokens['accessToken'];
+
+    try {
+      await post(
+        'http://192.168.0.8:5002/api/app/switch_smart_irrigation',
+        headers: {'Authorization': 'Bearer $accessToken'},
+      );
+
+      await _getSmartIrrigationStatus();
+    } catch (error) {
+      throw error;
+    }
+  }
+
   @override
   void initState() {
     _isLoading = true;
     super.initState();
+    _getSmartIrrigationStatus();
   }
 
   @override
@@ -72,20 +119,32 @@ class _IrrigationConfigState extends State<IrrigationConfig> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
-                          Container(
-                              margin: EdgeInsets.only(
-                                  left: ScreenUtil.instance.setWidth(0.0)),
-                              width: ScreenUtil.instance.setWidth(60.0),
-                              child: Checkbox(
-                                activeColor: Color.fromRGBO(144, 201, 82, 1),
-                                checkColor: Colors.white,
-                                value: irrigationStatus,
-                                onChanged: (bool value) {
-                                  setState(() {
-                                    irrigationStatus = value;
-                                  });
-                                },
-                              )),
+                          _isLoading
+                              ? Container(
+                                  margin: EdgeInsets.only(
+                                      left: ScreenUtil.instance.setWidth(10.0),
+                                      right: ScreenUtil.instance.setWidth(5.0)),
+                                  child: CircularProgressIndicator(
+                                    backgroundColor:
+                                        Color.fromRGBO(144, 201, 82, 1),
+                                    valueColor:
+                                        new AlwaysStoppedAnimation<Color>(
+                                            Colors.white),
+                                  ),
+                                )
+                              : Container(
+                                  margin: EdgeInsets.only(
+                                      left: ScreenUtil.instance.setWidth(3.0)),
+                                  width: ScreenUtil.instance.setWidth(60.0),
+                                  child: Checkbox(
+                                    activeColor:
+                                        Color.fromRGBO(144, 201, 82, 1),
+                                    checkColor: Colors.white,
+                                    value: irrigationStatus,
+                                    onChanged: (bool value) {
+                                      _setSmartIrrigation();
+                                    },
+                                  )),
                         ],
                       ),
                       Column(
@@ -120,9 +179,9 @@ class _IrrigationConfigState extends State<IrrigationConfig> {
                           left: ScreenUtil.instance.setWidth(35.0)),
                       padding: EdgeInsets.all(ScreenUtil.instance.setWidth(30)),
                       width: ScreenUtil.instance.setWidth(350),
-                      height: ScreenUtil.instance.setHeight(220),
+                      height: ScreenUtil.instance.setHeight(200),
                       child: Text(
-                        'Irrigar sempre que a umidade estiver abaixo de 20%.\n\nVocê será notificado sempre que as mudas forem irrigadas.',
+                        'Irrigar sempre que a umidade estiver baixa.\n\nVocê será notificado sempre que as mudas forem irrigadas.',
                         style: TextStyle(
                             fontSize: ScreenUtil.instance.setSp(23.0),
                             fontWeight: FontWeight.w400,
